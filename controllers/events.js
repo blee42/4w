@@ -32,8 +32,8 @@ function getVenues(req, callback) {
 		}
 	],
 	function(err, results) {
-		var foodVenues = filterVenues(results[0], req.user); // nothing is taken out yet
-		var eventVenues = filterVenues(results[1], req.user);
+		var foodVenues = results[0];
+		var eventVenues = results[1];
 
 		Cache.findOne({}, function(err, theCache) {
 			var foodToCache = foodVenues.slice();
@@ -180,7 +180,7 @@ function getVenueData(venue) {
 	return info;
 };
 
-function sortVenues(cache, idList) {
+function sortVenues(cache, idList, user) {
 
 	var venueList = [];
 	for(var i=0; i < cache.length; i++) {
@@ -214,13 +214,18 @@ function filterVenues(venueList, user) {
 };
 
 function getTodaysHours(venue) {
-	var timeframes = venue.hours.timeframes;
-	for(var i=0; i < timeframes.length; i++) {
-		if (timeframes[i].includesToday == true) {
-			return timeframes[i].open[0].renderedTime;
+	try {
+		var timeframes = venue.hours.timeframes;
+		for(var i=0; i < timeframes.length; i++) {
+			if (timeframes[i].includesToday == true) {
+				return timeframes[i].open[0].renderedTime;
+			}
 		}
+		return timeframes[0].open[0].renderedTime;
 	}
-	return timeframes[0].open[0].renderedTime;
+	catch (err) {
+		return false;
+	}
 
 };
 
@@ -242,9 +247,11 @@ exports.getEvents = function(req, res) {
 		var foodIDs = results[0][1];
 		var eventIDs = results[0][2];
 
-		var foodList = sortVenues(cache.foodCache, foodIDs);
-		console.log(foodList[0]);
-		var eventList = sortVenues(cache.eventCache, eventIDs);
+		var foodList = sortVenues(cache.foodCache, foodIDs, req.user);
+		var eventList = sortVenues(cache.eventCache, eventIDs, req.user);
+
+		console.log(foodList.length);
+		console.log(eventList.length);
 
 		res.render('events/events', {
 			title: 'Events',
@@ -257,11 +264,10 @@ exports.getEvents = function(req, res) {
 //time is morning (10), afternoon(14), evening (18)
 //range is today's hours of operation string "7:00AM-2:00PM"
 function isTimeWithinRange(time, range) {
+	if (range == false) {
+		return false;
+	}
 	openCloseTimes = range.split('-'); //0 is open, 1 is close
-	a=convertMilitaryTime(openCloseTimes[0])
-	b=convertMilitaryTime(openCloseTimes[1])
-	console.log(a)
-	console.log(b)
 	if (convertMilitaryTime(openCloseTimes[0]) < time && time < convertMilitaryTime(openCloseTimes[1]))
 		return true
 	else
