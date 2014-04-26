@@ -28,8 +28,8 @@ function getVenues(req, callback) {
 		}
 	],
 	function(err, results) {
-		var foodVenues = results[0];
-		var eventVenues = results[1];
+		var foodVenues = filterVenues(results[0], req.user); // nothing is taken out yet
+		var eventVenues = filterVenues(results[1], req.user);
 
 		Cache.findOne({}, function(err, theCache) {
 			var foodToCache = foodVenues.slice();
@@ -197,13 +197,13 @@ function sortVenues(cache, idList) {
 // add additional filters if necessary
 	// mall filter (!!!)
 // visitedVenues should be an array of IDs
-function filterVenues(venueList, user) {
+function filterVenues(idList, user) {
 	var visitedVenues = [];
 	if (user) {
 		visitedVenues = user.visitedVenues;
 	}
 
-	return _.filter(venueList, function(venue) {
+	return _.filter(idList, function(venue) {
 		return visitedVenues.indexOf(venue.id) == -1;
 	});
 };
@@ -220,6 +220,7 @@ function getSortedEventVenues(eventCache, eventList) {
 };
 
 exports.getEvents = function(req, res) {
+	computeQueries(req);
 	async.parallel([
 		function(callback) {
 			getVenues(req, callback);
@@ -231,6 +232,7 @@ exports.getEvents = function(req, res) {
 		var eventIDs = results[0][2];
 
 		var foodList = sortVenues(cache.foodCache, foodIDs);
+		console.log(foodList[0]);
 		var eventList = sortVenues(cache.eventCache, eventIDs);
 
 		res.render('events/events', {
@@ -239,11 +241,24 @@ exports.getEvents = function(req, res) {
 			eventLocation: eventList // this should be the first event in cache
 		});
 	});
-}
+};
 
-// exports.getEvents = function(req, res) {
-//   res.render("events/events", {
-//     title: 'Events'
-//   });
-// };
+function computeQueries(req) {
+	if (req.user) {
+		User.findById(req.user.id, function(err, user) {
+			switch (req.body.timeOfDay) {
+				case "morning":
+					break;
+				case "afternoon":
+					break;
+				default: // night
+					if (user.preferences.is21 == "true") {
+						user.eventPreference.query[2] = "4d4b7105d754a06376d81259";
+					}
+					break;
+			}
+			user.save();
+		});
+	}
 
+};

@@ -20,6 +20,7 @@ var userSchema = new mongoose.Schema({
   // Selection Preferences
 
   visitedVenues: Array, //things a person has done
+  time: String,
 
   preferences: {
     price: {type: String, default:'20-30'}, // "10-20", "20-30", "30+"
