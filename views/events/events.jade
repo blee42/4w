@@ -29,7 +29,7 @@ block content
 			.col-xs-6.detail-row
 				form(method='POST')
 					input(type='hidden', name='_csrf', value=_csrf)
-					button#image-button(type='submit',formaction='/refresh-event-food-#{foodLocation[0].id}')
+					button#image-button(type='submit',formaction='/refresh-event-food-#{eventLocation[0].id}')
 				.badge-div
 					a.pull-right.button.btn.btn-default.btn-icon.badge-indiv(href='http://www.northwestern.edu/uservices/transportation/shuttles/chicago/index.html', target='_blank', type='button')
 						img(class='badge-img', src='../img/bus.png', alt='shuttle', width='40')
@@ -65,7 +65,7 @@ block content
 			.col-xs-6.detail-row
 				form(method='POST')
 					input(type='hidden', name='_csrf', value=_csrf)
-					button#image-button(type='submit',formaction='/refresh-food-event-#{eventLocation[0].id}')
+					button#image-button(type='submit',formaction='/refresh-food-event-#{foodLocation[0].id}')
 				.badge-div
 					a.pull-right.button.btn.btn-default.btn-icon.badge-indiv(href='http://www.northwestern.edu/uservices/transportation/shuttles/chicago/index.html', target='_blank', type='button')
 						img(class='badge-img', src='../img/bus.png', alt='shuttle', width='40')
