@@ -75,13 +75,21 @@ function getVenues(req, callback) {
 }
 
 function cacheItems(items, cache, space) {
-	for(var i = 0; i < items.length; i++) {
-		foursquare.venues.venue(items[i], {}, function(err, venueInfo) {
+	async.each(items, function(item, callback) {
+		foursquare.venues.venue(item, {}, function(err, venueInfo) {
 			cache[space].push(getVenueData(venueInfo.response.venue));
-			cache.save(); // ??
-		});
-	}
+			cache.save();
+		})},
+		function(err) {
+			if (err) {
+				console.log("An error as occured!");
+			}
+			else {
+				console.log("Done! Yes! Finally!");
+			}
+	})
 }
+
 
 function getFoodVenues(req, callback) {
 	var food = DEFAULT_FOOD; // general food
