@@ -382,6 +382,13 @@ exports.getEvents = function(req, res) {
 		console.log(foodList.length);
 		console.log(eventList.length);
 		if (req.user) { //copy over to Events
+			User.findById(req.user.id, function(err, user) {
+				user.venueHistory.current.food = user.venueHistory.current.food.concat(filterHistoryDuplicates(foodList, user));
+				user.venueHistory.current.events = user.venueHistory.current.events.concat(filterHistoryDuplicates(eventList, user));
+				user.venueHistory.visited.push(foodList[0].id);
+				user.venueHistory.visited.push(eventList[0].id);
+				user.save();
+			});
 			var foodVen = {};
 			var foodLoc = {};
 			foodVen.name=foodList[0].name; //copy food
@@ -516,3 +523,4 @@ exports.saveSchema = function(req, res) {
 		});
 	});
 }
+
