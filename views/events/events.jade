@@ -1,18 +1,15 @@
 extends ../layout
 
 block content
-	.container-fluid.text-center
+	.container-fluid
 		.row
-			h1 Name
-			h2 Location
-			h3 Rating
+			h3 Name | Rating
+			h3 Location
 		.row
-			h1 Name2
-			h2 Location2
-			h3 Rating2
+			h3 Name2 | Rating
+			h3 Location2
+		.row#map
+			//- iframe(width='100%', height='400', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=12128%20SE%2013th%20St%2C%20Bellevue%2C%20WA%2C%20United%20States&destination=1927%20Orrington%20Avenue%2C%20Evanston%2C%20IL%2C%20United%20States&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
-			h1 Map
-		.row
-			btn-group
-					.button.btn.btn-default(type='button') Save
-					.button.btn.btn-default(type='button') Share
+			.button.btn.btn-default.btn-lg.btn-clear(type='button') Save
+			.pull-right.button.btn.btn-default.btn-lg.btn-clear(type='button') Share
