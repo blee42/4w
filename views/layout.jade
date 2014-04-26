@@ -10,7 +10,12 @@ html
     title #{title} | 4wheels
     != css('styles')
     != js('application')
-  body.chicago-back
+    - var currTime = new Date().getHours();
+    if (6 < currTime && currTime < 18)
+      body(class="chicago-day")
+    else
+      body(class="chicago-night")
+      
     #wrap
       include partials/navigation
       .container-fluid
