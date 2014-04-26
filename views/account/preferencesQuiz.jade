@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-	.container-fluid.onboard-wrap
+	.container-fluid.text-center
 		form(method='POST', action='/account/save-pref')#msform
 			input(type='hidden', name='_csrf', value=_csrf)
 			ul#progressbar

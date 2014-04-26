@@ -21,7 +21,7 @@ colors.setTheme({
 inquirer.prompt({
   type: 'list',
   name: 'category',
-  message: 'Hackathon Starter:',
+  message: 'One day in Chicago:',
   choices: ['☂ Authentication', '☎ Email Service', '☱ Exit']
 }, function(answer) {
 
