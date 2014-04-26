@@ -254,6 +254,29 @@ exports.getEvents = function(req, res) {
 	});
 };
 
+//time is morning (10), afternoon(14), evening (18)
+//range is today's hours of operation string "7:00AM-2:00PM"
+function isTimeWithinRange(time, range) {
+	openCloseTimes = range.split('-'); //0 is open, 1 is close
+	a=convertMilitaryTime(openCloseTimes[0])
+	b=convertMilitaryTime(openCloseTimes[1])
+	console.log(a)
+	console.log(b)
+	if (convertMilitaryTime(openCloseTimes[0]) < time && time < convertMilitaryTime(openCloseTimes[1]))
+		return true
+	else
+		return false
+};
+
+//strTime is a stringTime "7:00AM" or "2:00PM" that will be converted to 7 and 14
+function convertMilitaryTime(strTime) {
+	console.log(strTime);
+	if (strTime.indexOf("PM")!=-1) //it is pm
+		return ret = Number(strTime.split(':')[0]) + 12
+	else
+		return ret = Number(strTime.split(':')[0]) 
+};
+
 function computeQueries(req) {
 	if (req.user) {
 		switch (req.body.timeOfDay) {
