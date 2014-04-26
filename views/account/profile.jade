@@ -65,8 +65,14 @@ block content
     h3 Saved Trips
   .profile  
     .ul.list-group
+      - var counter = 0;
       each trip in events
-        | #{trip}
+        - counter = counter + 1;
+      each trip in events
+        .li.list-group-item
+          a(href="http://onedayinchicago.herokuapp.com/save-link-#{trip.id}") #{trip.foodVenue.name} and #{trip.eventVenue.name}
+
+
 
   //- .page-header
   //-   h3 Delete Account
