@@ -18,6 +18,7 @@ var wildcardDiscounts = require("../wildcardChicagoList.js");
 var location = "The Loop, Chicago IL"
 
 function getVenues(req, callback) {
+
 	async.parallel([
 		function(cback) {
 			getFoodVenues(req, cback);
@@ -30,36 +31,42 @@ function getVenues(req, callback) {
 		var foodVenues = results[0];
 		var eventVenues = results[1];
 
-		console.log(Cache.foodCache);
-
-		for(var i=0; i < Cache.foodCache.length; i++) {
-			var index = foodVenues.indexOf(Cache.foodCache[i].id);
-			if (index > -1) {
-				foodVenues.splice(index, 1);
+		Cache.findOne({}, function(err, theCache) {
+			if (theCache) {
+				console.log(theCache);
 			}
-		}
-
-		for(var i=0; i < Cache.eventCache.length; i++) {
-			var index = eventVenues.indexOf(Cache.eventCache[i].id);
-			if (index > -1) {
-				eventVenues.splice(index, 1);
+			else {
+				theCache = new Cache();
 			}
-		}
+			
+			for(var i=0; i < theCache.foodCache.length; i++) {
+				var index = foodVenues.indexOf(theCache.foodCache[i].id);
+				if (index > -1) {
+					foodVenues.splice(index, 1);
+				}
+			}
 
-		cacheItems(foodVenues, "foodCache");
-		cacheItems(eventVenues, "eventCache");
+			for(var i=0; i < theCache.eventCache.length; i++) {
+				var index = eventVenues.indexOf(theCache.eventCache[i].id);
+				if (index > -1) {
+					eventVenues.splice(index, 1);
+				}
+			}
 
-		console.log("done?");
+			cacheItems(foodVenues, theCache, "foodCache");
+			cacheItems(eventVenues, theCache, "eventCache");
 
-		callback(null, 1);
+			console.log("done?");
+			callback(null, theCache);
+		})
 	});
 }
 
-function cacheItems(items, space) {
+function cacheItems(items, cache, space) {
 	for(var i = 0; i < items.length; i++) {
 		foursquare.venues.venue(items[i], {}, function(err, venueInfo) {
-			Cache[space].push(getVenueData(venueInfo.response.venue));
-			Cache.save(); // ??
+			cache[space].push(getVenueData(venueInfo.response.venue));
+			cache.save(); // ??
 		});
 	}
 }
@@ -195,10 +202,7 @@ exports.getEvents = function(req, res) {
 			events: results[1],
 		});
 		console.log("Let's see how this goes.");
-		console.log(Cache.foodCache[0])
-		console.log(Cache.eventCache[0]);
-		console.log(Cache.foodCache.length);
-		console.log(Cache.eventCache.length);
+
 	});
 }
 
