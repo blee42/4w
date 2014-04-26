@@ -13,6 +13,7 @@ var async = require("async");
 var _ = require("underscore");
 var foursquare = require('node-foursquare-venues')(secrets.foursquare.clientId, secrets.foursquare.clientSecret);
 var wildcardDiscounts = require("../wildcardChicagoList.js");
+
 var DEFAULT_FOOD = ["4d4b7105d754a06374d81259", ""];
 var DEFAULT_EVENTS = ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"];
 var TIME_FILTER = "2pm";
@@ -255,29 +256,27 @@ exports.getEvents = function(req, res) {
 
 function computeQueries(req) {
 	if (req.user) {
-		User.findById(req.user.id, function(err, user) {
-			switch (req.body.timeOfDay) {
-				case "morning":
-					user.foodPreference.query[0] = "4bf58dd8d48988d143941735"; // breakfast spot
-					DEFAULT_FOOD = "4bf58dd8d48988d143941735";
-					TIME_FILTER = "10am";
-					break;
-				case "night":
-					user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
-					DEFAULT_FOOD = "4d4b7105d754a06374d81259";
-					TIME_FILTER = "6pm";
-					if (user.preferences.is21 == "true") {
-						user.eventPreference.query[2] = "4d4b7105d754a06376d81259"; // nightlife
-					}
-					break;
-				default: // afternoon, shouldn't happen
-					user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
-					DEFAULT_FOOD = "4d4b7105d754a06374d81259"; 
-					TIME_FILTER = "2pm";
-					break;
-			}
-			user.save();
-		});
+		switch (req.body.timeOfDay) {
+			case "morning":
+				req.user.foodPreference.query[0] = "4bf58dd8d48988d143941735"; // breakfast spot
+				DEFAULT_FOOD = "4bf58dd8d48988d143941735";
+				TIME_FILTER = "10am";
+				break;
+			case "night":
+				req.user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
+				DEFAULT_FOOD = "4d4b7105d754a06374d81259";
+				TIME_FILTER = "6pm";
+				if (req.user.preferences.is21 == "true") {
+					req.user.eventPreference.query[2] = "4d4b7105d754a06376d81259"; // nightlife
+				}
+				break;
+			default: // afternoon, shouldn't happen
+				req.user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
+				DEFAULT_FOOD = "4d4b7105d754a06374d81259"; 
+				TIME_FILTER = "2pm";
+				break;
+		}
+		req.user.save();
 	}
 
 };
