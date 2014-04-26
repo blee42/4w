@@ -1,7 +1,6 @@
 $(document).ready(function() {
 
 // Place JavaScript code here...
-	console.log("helllo")
 	 
 	 if(jQuery().easing) {
      //run plugin dependent code
