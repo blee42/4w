@@ -9,7 +9,7 @@ block content
 				h1.fa.fa-sort-asc
 		.row.text-center
 			h3 start at home and go to 
-				span.fancy-font #{eventLocation[0].name}
+				span #{eventLocation[0].name}
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{latHome},#{longHome}&destination=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&mode=transit&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
 			.col-md-6.detail-row
@@ -45,9 +45,9 @@ block content
 							p.icon-label Discount
 		.row.text-center
 			h3 once you've visited 
-				span.fancy-font #{eventLocation[0].name} 
+				span #{eventLocation[0].name} 
 				span head over to 
-				span.fancy-font #{foodLocation[0].name}
+				span #{foodLocation[0].name}
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&destination=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&mode=transit&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
 			.col-md-6.detail-row
