@@ -5,8 +5,8 @@ block content
 
 		.row
 			h3 Begin your adventure...
-			h3 Start at YOUR_LOCATION and go to #{eventLocation[0].name}
-			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=12128%20SE%2013th%20St%2C%20Bellevue%2C%20WA%2C%20United%20States&destination=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
+			h3 Start at home and go to #{eventLocation[0].name}
+			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{latHome},#{longHome}&destination=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&mode=transit&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
 			.col-xs-6.detail-row
 				span.event-text #{eventLocation[0].name}
@@ -40,7 +40,7 @@ block content
 							p.icon-label Discount
 		.row
 			h3 Once you've visited #{eventLocation[0].name} head over to #{foodLocation[0].name}
-			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&destination=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
+			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&destination=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&mode=transit&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
 			.col-xs-6.detail-row
 				span.event-text #{foodLocation[0].name}
@@ -73,8 +73,41 @@ block content
 							img(class='badge-img', src='../img/paw.png', alt='wildcat discount', width='40')
 							p.icon-label Discount
 		.row
-			h3 After your fun journey, head home to LOCATION_3
-			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&destination=1927%20Orrington%20Avenue%2C%20Evanston%2C%20IL%2C%20United%20States&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
+			h3 After your fun journey, head home!
+			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&destination=#{latHome},#{longHome}&mode=transit&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
 			.button.btn.btn-default.btn-lg.btn-clear(type='button') Save
 			.pull-right.button.btn.btn-default.btn-lg.btn-clear(type='button') Share
+
+	script(type='text/javascript').
+		$(document).ready(function(){
+			//Check if browser supports W3C Geolocation API
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+			} 
+			//Get latitude and longitude;
+			function successFunction(position) {
+				var latHome = position.coords.latitude;
+				var longHome = position.coords.longitude;
+				console.log(latHome);
+				console.log(longHome);
+			}
+
+			function errorFunction() {
+				console.log("error");
+			}
+		})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
