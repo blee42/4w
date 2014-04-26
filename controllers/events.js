@@ -8,7 +8,7 @@
 //  - venue returns: https://developer.foursquare.com/docs/responses/venue
 
 var secrets = require("../config/secrets");
-var Cache = require("../models/EventCache.js");
+var Cache = require("../models/EventCache");
 var async = require("async");
 var _ = require("underscore");
 var foursquare = require('node-foursquare-venues')(secrets.foursquare.clientId, secrets.foursquare.clientSecret);
@@ -17,16 +17,63 @@ var wildcardDiscounts = require("../wildcardChicagoList.js");
 // Hardcoded Constants: may or may not be temporary
 var location = "The Loop, Chicago IL"
 
+function getVenues(req, callback) {
+	async.parallel([
+		function(cback) {
+			getFoodVenues(req, cback);
+		},
+		function(cback) {
+			getEventVenues(req, cback);
+		}
+	],
+	function(err, results) {
+		var foodVenues = results[0];
+		var eventVenues = results[1];
+
+		console.log(Cache.foodCache);
+
+		for(var i=0; i < Cache.foodCache.length; i++) {
+			var index = foodVenues.indexOf(Cache.foodCache[i].id);
+			if (index > -1) {
+				foodVenues.splice(index, 1);
+			}
+		}
+
+		for(var i=0; i < Cache.eventCache.length; i++) {
+			var index = eventVenues.indexOf(Cache.eventCache[i].id);
+			if (index > -1) {
+				eventVenues.splice(index, 1);
+			}
+		}
+
+		cacheItems(foodVenues, "foodCache");
+		cacheItems(eventVenues, "eventCache");
+
+		console.log("done?");
+
+		callback(null, 1);
+	});
+}
+
+function cacheItems(items, space) {
+	for(var i = 0; i < items.length; i++) {
+		foursquare.venues.venue(items[i], {}, function(err, venueInfo) {
+			Cache[space].push(getVenueData(venueInfo.response.venue));
+			Cache.save(); // ??
+		});
+	}
+}
+
 function getFoodVenues(req, callback) {
 	var food = ["4d4b7105d754a06374d81259", ""]; // general food
 	if (req.user) { // check that preferences have bene filled
 		food = req.user.foodPreference.query;
 	} 
-	foursquare.venues.search({near: location, limit: "50", categoryId: food[0], query: food[1]}, function(err, foodVenues) {
+	foursquare.venues.search({near: location, limit: "5", categoryId: food[0], query: food[1]}, function(err, foodVenues) {
 		var venues = [];
 
 		for(var i=0; i < foodVenues.response.venues.length; i++) {
-			venues.push(getVenueData(foodVenues.response.venues[i]));
+			venues.push(foodVenues.response.venues[i].id);
 		}
 
 		callback(null, venues);
@@ -44,28 +91,27 @@ function getEventVenues(req, callback) {
 
 	async.parallel([
 		function(cback) {
-			foursquare.venues.search({near: location, limit: "50", categoryId: events[0]}, function(err, eventVenues) {
+			foursquare.venues.search({near: location, limit: "5", categoryId: events[0]}, function(err, eventVenues) {
 				for(var i=0; i < eventVenues.response.venues.length; i++) {
-
-					venues1.push(getVenueData(eventVenues.response.venues[i]));
+					venues1.push(eventVenues.response.venues[i].id);
 				}
 
 				cback(null, 1);
 			});
 		},
 		function(cback) {
-			foursquare.venues.search({near: location, limit: "50", categoryId: events[1]}, function(err, eventVenues) {
+			foursquare.venues.search({near: location, limit: "5", categoryId: events[1]}, function(err, eventVenues) {
 				for(var i=0; i < eventVenues.response.venues.length; i++) {
-					venues2.push(getVenueData(eventVenues.response.venues[i]));
+					venues2.push(eventVenues.response.venues[i].id);
 				}
 
 				cback(null, 2);
 			});
 		},
 		function(cback) {
-			foursquare.venues.search({near: location, limit: "50", categoryId: events[2]}, function(err, eventVenues) {
+			foursquare.venues.search({near: location, limit: "5", categoryId: events[2]}, function(err, eventVenues) {
 				for(var i=0; i < eventVenues.response.venues.length; i++) {
-					venues3.push(getVenueData(eventVenues.response.venues[i]));
+					venues3.push(eventVenues.response.venues[i].id);
 				}
 
 				cback(null, 3);
@@ -139,10 +185,7 @@ function scoreVenue(venue) {
 exports.getEvents = function(req, res) {
 	async.parallel([
 		function(callback) {
-			getFoodVenues(req, callback);
-		},
-		function(callback) {
-			getEventVenues(req, callback);
+			getVenues(req, callback);
 		}
 	],
 	function(err, results) {
@@ -151,10 +194,11 @@ exports.getEvents = function(req, res) {
 			food: results[0],
 			events: results[1],
 		});
-		console.log(results[0][0]);
-		console.log(results[1][0]);
-		console.log(results[0].length);
-		console.log(results[1].length);
+		console.log("Let's see how this goes.");
+		console.log(Cache.foodCache[0])
+		console.log(Cache.eventCache[0]);
+		console.log(Cache.foodCache.length);
+		console.log(Cache.eventCache.length);
 	});
 }
 
