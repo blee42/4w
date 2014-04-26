@@ -26,7 +26,7 @@ module.exports = {
   facebook: {
     clientID: process.env.FACEBOOK_ID || '674823265912761',
     clientSecret: process.env.FACEBOOK_SECRET || '2c827d214f37d3b459a94a1d5bc85509',
-    callbackURL: 'http://localhost:3000/auth/facebook/callback',
+    callbackURL: 'http://onedayinchicago.herokuapp.com/auth/facebook/callback',
     passReqToCallback: true
   },
 
