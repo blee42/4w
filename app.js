@@ -17,8 +17,8 @@ var mongo = require('mongodb');
 // var mongoUri = process.env.MONGOLAB_URI ||
 //   process.env.MONGOHQ_URL ||
 //   'mongodb://localhost/mydb';
-  
-var MongoStore = require('connect-mongo')({ session: session });
+
+var MongoStore = require('connect-mongo')(express);
 var flash = require('express-flash');
 var path = require('path');
 var mongoose = require('mongoose');
