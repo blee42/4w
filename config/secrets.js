@@ -92,7 +92,7 @@ module.exports = {
   foursquare: {
     clientId: process.env.FOURSQUARE_ID || '1S5ZWDKVMROVPLY0MELI23DS2DTNWGCINXW1FPAVUX3Y5SH2',
     clientSecret: process.env.FOURSQUARE_SECRET || 'GDOTZTHVDEMB1C0PAEN3LRCJQJR0XSMWEZM1W5QJI4AZLRLY',
-    redirectUrl: process.env.FOURSQUARE_REDIRECT_URL || 'http://localhost:3000/auth/foursquare/callback'
+    redirectUrl: process.env.FOURSQUARE_REDIRECT_URL || 'http://onedayinchicago.herokuapp.com/auth/foursquare/callback'
   },
 
   venmo: {

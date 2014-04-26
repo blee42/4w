@@ -91,7 +91,7 @@ block content
 					button.button.btn.btn-default.btn-lg.btn-clear(type='submit', formaction='/save-link-#{EventsID}') Save
 				else
 					| Log in to save.
-				.pull-right.button.btn.btn-default.btn-lg.btn-clear(type='submit' formaction='/share-link') Share
+				a.pull-right.button.btn.btn-default.btn-lg.btn-clear(type='submit' href="mailto:?subject=Join me on this trip!?content?body=See more here: http://onedayinchicago.herokuapp.com/save-link-#{EventsID}") Share
 
 	script(type='text/javascript').
 		$(document).ready(function(){
