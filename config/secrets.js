@@ -24,9 +24,9 @@ module.exports = {
   },
 
   facebook: {
-    clientID: process.env.FACEBOOK_ID || '754220301289665',
-    clientSecret: process.env.FACEBOOK_SECRET || '41860e58c256a3d7ad8267d3c1939a4a',
-    callbackURL: '/auth/facebook/callback',
+    clientID: process.env.FACEBOOK_ID || '674823265912761',
+    clientSecret: process.env.FACEBOOK_SECRET || '2c827d214f37d3b459a94a1d5bc85509',
+    callbackURL: 'http://localhost:3000/auth/facebook/callback',
     passReqToCallback: true
   },
 
@@ -90,8 +90,8 @@ module.exports = {
   },
 
   foursquare: {
-    clientId: process.env.FOURSQUARE_ID || '2STROLSFBMZLAHG3IBA141EM2HGRF0IRIBB4KXMOGA2EH3JG',
-    clientSecret: process.env.FOURSQUARE_SECRET || '2STROLSFBMZLAHG3IBA141EM2HGRF0IRIBB4KXMOGA2EH3JG',
+    clientId: process.env.FOURSQUARE_ID || '1S5ZWDKVMROVPLY0MELI23DS2DTNWGCINXW1FPAVUX3Y5SH2',
+    clientSecret: process.env.FOURSQUARE_SECRET || 'GDOTZTHVDEMB1C0PAEN3LRCJQJR0XSMWEZM1W5QJI4AZLRLY',
     redirectUrl: process.env.FOURSQUARE_REDIRECT_URL || 'http://localhost:3000/auth/foursquare/callback'
   },
 
