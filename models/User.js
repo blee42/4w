@@ -19,19 +19,29 @@ var userSchema = new mongoose.Schema({
 
   // Selection Preferences
 
-  visitedVenues: Array, //things a person has done
   time: String,
 
   preferences: {
-    price: {type: String, default:'20-30'}, // "10-20", "20-30", "30+"
+    pricePref: {type: String, default:'20-30'}, // "10-20", "20-30", "30+"
     is21: {type: String, default:'no'}, // "yes" or "no"
+    eventPref: {type: String, default: ''},
+    placePref: {type: String, default: ''},
+    priceFilter: String,
     xFilter: Array, // things person hit 'x' on that were beyond the probation
   },
   foodPreference: {
-    query: { type: Array, default: ["4d4b7105d754a06374d81259", ""] }
+    query: { type: Array, default: ["4d4b7105d754a06374d81259", "4bf58dd8d48988d16d941735"] }
   },
   eventPreference: {
     query: { type: Array, default: ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"] }
+  },
+
+  venueHistory: {
+    current: {
+      food: Array,
+      events: Array
+    },
+    visited: Array
   },
 
   // end

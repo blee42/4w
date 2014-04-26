@@ -244,11 +244,11 @@ exports.onboardPref = function(req, res) {
 exports.saveUserPreferences = function(req, res) {
   if (req.user) {
     User.findById(req.user.id, function(err, user) {
-      user.preferences.price = req.body["price"];
-      user.preferences.is21 = req.body["is21"];
-      user.preferences.transPref = req.body["trans-pref"];
-      computeQueries(user);
-      //computeRating(user);
+      user.preferences.pricePref = req.body["price-pref"];
+      user.preferences.is21 = req.body["age-pref"];
+      user.preferences.eventPref = req.body["event-pref"];
+      user.preference.placePref = req.body["place-pref"]
+
       user.save();
     });
   }
@@ -400,3 +400,4 @@ exports.postForgot = function(req, res, next) {
     res.redirect('/forgot');
   });
 };
+

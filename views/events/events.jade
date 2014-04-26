@@ -85,8 +85,13 @@ block content
 			h3 after your fun journey, head home!
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&destination=#{latHome},#{longHome}&mode=transit&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
-			.button.btn.btn-default.btn-lg.btn-clear(type='button') Save
-			.pull-right.button.btn.btn-default.btn-lg.btn-clear(type='button') Share
+			form(method='GET')
+				input(type='hidden', name='_csrf', value=_csrf)
+				if (user)
+					button.button.btn.btn-default.btn-lg.btn-clear(type='submit', formaction='/save-link-#{EventsID}') Save
+				else
+					| Log in to save.
+				.pull-right.button.btn.btn-default.btn-lg.btn-clear(type='submit' formaction='/share-link') Share
 
 	script(type='text/javascript').
 		$(document).ready(function(){
