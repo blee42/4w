@@ -40,6 +40,12 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  background-attachment: fixed;
+
+}
+
+.col-xs-8, .col-xs-4 {
+  padding:0;
 }
 
 .row {
@@ -130,10 +136,6 @@ body {
 // Home
 // -------------------------
 
-.grad-background {
-  background: linear-gradient(#00aff0 30%, white);
-  // background-color: #00aff0;
-}
 
 // Events
 // -------------------------
@@ -159,8 +161,27 @@ body {
   background-image: none;
 }
 
-#map {
-  margin:30px 0 30px 0;
+.btn-icon, .btn-icon:hover {
+  padding-top:0;
+  background-color: transparent;
+  color:white;
+  box-shadow: none;
+  border:none;
+  font-size: x-large;
 }
+
+.map-div {
+  margin:15px 15px 15px 0;
+}
+
+.fa-times {
+  margin-top:20px;
+  margin-right: 0;
+  padding:0;
+}
+
+#event-list {
+}
+
 
 
