@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+	.container-fluid.onboard-wrap
+		form(method='POST', action='/account/save-pref')#msform
+			input(type='hidden', name='_csrf', value=_csrf)
+			ul#progressbar
+				li.active Start
+				li.active Step 2
+				li.active Step 3
+				li.active Step 4
+				li.active End
+			fieldset
+				h2.fs-title Start
+				h3.fs-subtitle Let us help you plan your perfect day. Click next to give us your preferences.
+				input.next.action-button(type='button', name='next', value='Next')
+			fieldset
+				h2.fs-title End
+				h3.fs-subtitle Thanks for giving us your preferences!  Feel free to change them in your account settings. Click submit and enter the city you are spending your day in!
+				input.previous.action-button(type='button', name='previous', value='Previous')
+				input.submit.action-button(type='submit', name='submit', value='Submit')

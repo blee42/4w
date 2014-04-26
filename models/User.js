@@ -19,18 +19,16 @@ var userSchema = new mongoose.Schema({
 
   // Selection Preferences
 
-  visitedVenues: Array,
+  visitedVenues: Array, //things a person has done
 
   foodPreference: {
-    filterOut: Array,
-    probationFilter: Array,
-    categoryIds: Array,
+    filterOut: Array, // things person hit 'x' on that were beyond the probation
+    probationFilter: Array, //things person hit 'x' on below 3 times
     query: { type: Array, default: ["4d4b7105d754a06374d81259", ""] }
   },
   eventPreference: {
     filterOut: Array,
     probationFilter: Array,
-    categoryIds: Array,
     query: { type: Array, default: ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"] }
   },
 
