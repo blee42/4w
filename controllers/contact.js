@@ -48,7 +48,7 @@ exports.postContact = function(req, res) {
   var mailOptions = {
     to: to,
     from: from,
-    subject: subje
+    subject: subje,
     text: body
   };
 

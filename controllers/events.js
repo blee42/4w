@@ -406,7 +406,7 @@ function computeQueries(req) {
 			TIME_FILTER = "10:00AM";
 			break;
 		case "night":
-			DEFAULT_FOOD = ["4d4b7105d754a06374d81259", "4bf58dd8d48988d1ca941735"];
+			DEFAULT_FOOD = ["4bf58dd8d48988d10c941735", "4bf58dd8d48988d1ca941735"];
 			TIME_FILTER = "6:00PM";
 			break;
 		default: // afternoon, shouldn't happen
@@ -443,10 +443,10 @@ function computeQueries(req) {
 				req.user.foodPreference.query[0] = "4bf58dd8d48988d143941735"; // breakfast spot
 				break;
 			case "night":
-				req.user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
+				req.user.foodPreference.query[1] = "4bf58dd8d48988d116941735"; // bar
 				if (req.user.preferences.is21 == "true") {
 					req.user.eventPreference.query[1] = "4d4b7105d754a06376d81259";
-					req.user.eventPreference.query[2] = "4d4b7105d754a06376d81259"; // nightlife
+					req.user.eventPreference.query[2] = "4bf58dd8d48988d121941735"; // nightlife
 				}
 				break;
 			default: // afternoon, shouldn't happen

@@ -247,7 +247,7 @@ exports.saveUserPreferences = function(req, res) {
       user.preferences.pricePref = req.body["price-pref"];
       user.preferences.is21 = req.body["age-pref"];
       user.preferences.eventPref = req.body["event-pref"];
-      user.preference.placePref = req.body["place-pref"]
+      user.preferences.placePref = req.body["place-pref"]
 
       user.save();
     });
