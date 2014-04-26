@@ -2,17 +2,23 @@
 @import (less) "lib/font-awesome.min.css";
 @import "lib/bootstrap/bootstrap";
 @import "lib/bootstrap-social";
-@import "themes/default";
+
+@font-face {
+  font-family: 'Stalemate';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Stalemate'), local('Stalemate-Regular'), url(../fonts/stalemate.woff) format('woff');
+}
 
 // Scaffolding
 // -------------------------
-
 html, body {
   height: 100%;
 }
 
 body {
   padding-top: 30px;
+  height: 100%;
 }
 
 #wrap {
@@ -63,6 +69,11 @@ body {
   margin: 0 0 0 0;
 }
 
+.fancy-font {
+  font-family: 'Stalemate';
+  font-size: 35px;
+}
+
 // Navbar
 // -------------------------
 
@@ -76,11 +87,13 @@ body {
 .navbar-brand {
   background-color: transparent;
   background-repeat: no-repeat;
-  height: 45px;
+  height: 50px;
+  font-size: large;
 }
 
 .navbar-default {
   background-color: transparent;
+  font-size: large;
 }
 
 .navbar-default .navbar-brand {
@@ -101,7 +114,7 @@ body {
 }
 
 .container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
-  margin-left: 45px;
+  margin-left: 30px;
 } 
 
 .navbar-default .navbar-nav > li > a {
@@ -112,9 +125,26 @@ body {
   color:white;
 }
 
+.dropdown-menu > li > a, .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+  color: white;
+  padding: 5px 0 0 0;
+}
+
+.dropdown-menu > li > a:hover,.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+  color: white;
+  background-color: transparent;
+  padding-top: 5px;
+  font-weight: bold;
+}
+
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
   color:white;
   background-color: transparent;
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  background-color: transparent;
+  color:white;
 }
 
 .navbar-toggle {
@@ -196,6 +226,21 @@ body {
   }
 }
 
+.jumbotron {
+  margin: 20px 0;
+  background-color: transparent;
+  color:white;
+}
+
+#title {
+  padding-bottom: 10px;
+}
+
+.box {
+  // border-bottom: 2px solid white;
+  padding:30px;
+}
+
 // Home
 // -------------------------
 
@@ -224,6 +269,13 @@ body {
 
 // Events
 // -------------------------
+
+#event-list {
+  height:500px;
+  width:100%;
+  background-color: gray;
+  opacity: 0.8;
+}
 
 .btn-clear{
   margin: 20px 0 20px 0;
@@ -299,7 +351,7 @@ a, a:hover {
 
 .detail-row {
   margin:30px 0 30px 0;
-  height: 120px;
+  height: 150px;
 }
 
 .badge-div {
@@ -310,8 +362,8 @@ a, a:hover {
 
 .badge-indiv {
   text-align: center;
-  width:60px;
-  height:60px;
+  width:80px;
+  height:80px;
   margin: 0 10px 0 10px;
 }
 
@@ -347,6 +399,10 @@ a, a:hover {
   .badge-div {
   position: relative;
   }
+
+  .container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
+    margin-left: 15px;
+  } 
 }
 
 // .ename {
@@ -420,6 +476,7 @@ fieldset {
   position: relative;
   margin-top:125px;
   height:inherit;
+  float:center;
 }
 #msform fieldset {
   background: white;
@@ -428,7 +485,6 @@ fieldset {
   box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
   padding: 20px 30px;
   box-sizing: border-box;
-  width: 90%;
   margin: 0 10%;
   /*stacking fieldsets above each other*/
   position: absolute;
@@ -443,9 +499,7 @@ fieldset {
     border: 1px solid #ccc;
     border-radius: 3px;
     margin-bottom: 10px;
-    width: 100%;
     box-sizing: border-box;
-    font-family: montserrat;
     color: black;
     font-size: 13px;
 }

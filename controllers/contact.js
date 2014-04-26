@@ -43,12 +43,12 @@ exports.postContact = function(req, res) {
   var name = req.body.name;
   var body = req.body.message;
   var to = 'your@email.com';
-  var subject = 'Contact Form | Hackathon Starter';
+  var subject = 'Contact Form | One day in Chicago';
 
   var mailOptions = {
     to: to,
     from: from,
-    subject: subject,
+    subject: subje
     text: body
   };
 
