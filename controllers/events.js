@@ -36,10 +36,11 @@ function getVenues(req, callback) {
 			var eventsToCache = eventVenues.slice();
 
 			if (theCache) {
-				// console.log(theCache);
+				console.log("NO NEW CACHE WAS CREATED")
 			}
 			else {
 				theCache = new Cache();
+				console.log("NEW CACH MADE")
 			}
 
 			for(var i=0; i < theCache.foodCache.length; i++) {
@@ -56,6 +57,11 @@ function getVenues(req, callback) {
 				}
 			}
 
+			console.log("Checking food to add...");
+			console.log(foodToCache.length);
+			console.log("Checking events to add...");
+			console.log(eventsToCache.length);
+
 			cacheItems(foodToCache, theCache, "foodCache");
 			cacheItems(eventsToCache, theCache, "eventCache");
 
@@ -67,7 +73,7 @@ function getVenues(req, callback) {
 function cacheItems(items, cache, space) {
 	for(var i = 0; i < items.length; i++) {
 		foursquare.venues.venue(items[i], {}, function(err, venueInfo) {
-			cache.space.push(getVenueData(venueInfo.response.venue));
+			cache[space].push(getVenueData(venueInfo.response.venue));
 			cache.save(); // ??
 		});
 	}
@@ -140,7 +146,13 @@ function getVenueData(venue) {
 	info.location = venue.location; // attrib: address, crossStreet, lat, long, postal, city, state, country, cc
 	info.url = venue.canonicalUrl;
 	info.price = venue.price; // tier (1,2,3,4), message (cheap, moderate, etc.), currency ($, $$, etc.)
-	info.rating = Number(venue.rating) / 2;
+
+	if (venue.rating) {
+		info.rating = Number(venue.rating) / 2;	
+	}
+	else {
+		info.rating = 0;
+	}
 
 	// status (closed until x), isOpen, timeframes
 	// timeframes: days (Mon-Fri):, open (array of renderedTimes's), includesToday (boolean, today or not)
@@ -158,6 +170,8 @@ function getVenueData(venue) {
 	info.menu = venue.menu;
 
 	info.tags = venue.tags;
+
+	info.hasWildcardDiscount = (wildcardDiscounts.wildcardDiscountList.indexOf(venue.name) != -1);
 
 	return info;
 };
@@ -187,9 +201,17 @@ function filterVenues(venueList, user) {
 
 // we can update this scoring algorithm as needed!
 function scoreVenue(venue) {
-	venue.hasWildcardDiscount = (wildcardDiscounts.wildcardDiscountList.indexOf(venue.name) != -1);
 	var wildcardFactor = venue.hasWildcardDiscount * 3;
 	return venue.rating + wildcardFactor;
+};
+
+function getSortedFoodVenues(foodCache, foodList) {
+	return;
+};
+
+function getSortedEventVenues(eventCache, eventList) {
+	return;
+
 };
 
 exports.getEvents = function(req, res) {
@@ -199,18 +221,17 @@ exports.getEvents = function(req, res) {
 		}
 	],
 	function(err, results) {
-		var cache = results[0];
-		var foodIDs = results[1];
-		var eventIDs = results[2];
-		// console.log(cache);
-		// console.log(cache[0].length);
-		// console.log(cache[1].length);
-		// console.log(cache[2].length);
+		var cache = results[0][0];
+		var foodIDs = results[0][1];
+		var eventIDs = results[0][2];
+
+		var foodList = getSortedFoodVenues(cache.foodCache, foodIDs)
+		var eventList = getSortedEventVenues(cache.eventCache, eventIDs)
 		//This doesn't work guys
 		res.render('events/events', {
 			title: 'Events',
-			food: cache[1][0],
-			events: cache[1][0]
+			foodLocation: cache.foodCache, // this should be the first food in cache
+			eventLocation: cache.eventCache // this should be the first event in cache
 		});
 	});
 }
