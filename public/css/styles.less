@@ -60,7 +60,7 @@ body {
 .row {
   color:white;
   padding:0 30px 0 30px;
-  margin: 15px 0 0 0;
+  margin: 0 0 0 0;
 }
 
 // Navbar
@@ -255,13 +255,19 @@ body {
   font-size: x-large;
 }
 
-.map-div {
-  margin:15px 15px 15px 0;
+.btn-refresh, .btn-refresh:hover {
+  padding-top:0;
+  margin: 0 10px 0 10px;
+  height:30px;
+  width:30px;
+  background: url('../img/refresh.png');
+  background-size: cover;
+  box-shadow: none;
+  border:none;
 }
 
-.fa-times {
-  margin-right: 0;
-  padding:0;
+.map-div {
+  margin:15px 15px 15px 0;
 }
 
 .event-text {
@@ -323,12 +329,33 @@ a, a:hover {
   margin:0;
 }
 
-@media (max-width: 300px) {
+@media (max-width: 650px) {
   .detail-row {
-    margin:30px 0 30px 0;
-    height: 500px;
+    margin:20px 0 0 0;
+    height:100px;
+    padding:0px; 
+  }
+
+  .event-text {
+    font-size: normal;
+  }
+
+  .detail-text {
+    font-size: small;
+  }
+
+  .badge-div {
+  position: relative;
   }
 }
+
+// .ename {
+//   background-color: red;
+// }
+
+// .eicons {
+//   background-color: blue;
+// }
 
 
 
