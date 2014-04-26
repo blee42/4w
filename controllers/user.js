@@ -105,7 +105,7 @@ exports.postSignup = function(req, res, next) {
       if (err) return next(err);
       req.logIn(user, function(err) {
         if (err) return next(err);
-        res.redirect('/');
+        res.redirect('/account/onboard');
       });
     });
   });
@@ -233,6 +233,16 @@ exports.getReset = function(req, res) {
         title: 'Password Reset'
       });
     });
+};
+
+exports.onboardPref = function(req, res) {
+  res.render('account/preferencesQuiz', {
+    title: 'Welcome'
+  });
+};
+
+exports.saveUserPreferences = function(req, res) {
+  console.log("work bitch");
 };
 
 /**

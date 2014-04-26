@@ -32,32 +32,34 @@ function getVenues(req, callback) {
 		var eventVenues = results[1];
 
 		Cache.findOne({}, function(err, theCache) {
+			var foodToCache = foodVenues.slice();
+			var eventsToCache = eventVenues.slice();
+
 			if (theCache) {
-				console.log(theCache);
+				// console.log(theCache);
 			}
 			else {
 				theCache = new Cache();
 			}
-			
+
 			for(var i=0; i < theCache.foodCache.length; i++) {
-				var index = foodVenues.indexOf(theCache.foodCache[i].id);
+				var index = foodToCache.indexOf(theCache.foodCache[i].id);
 				if (index > -1) {
-					foodVenues.splice(index, 1);
+					foodToCache.splice(index, 1);
 				}
 			}
 
 			for(var i=0; i < theCache.eventCache.length; i++) {
-				var index = eventVenues.indexOf(theCache.eventCache[i].id);
+				var index = eventsToCache.indexOf(theCache.eventCache[i].id);
 				if (index > -1) {
-					eventVenues.splice(index, 1);
+					eventsToCache.splice(index, 1);
 				}
 			}
 
-			cacheItems(foodVenues, theCache, "foodCache");
-			cacheItems(eventVenues, theCache, "eventCache");
+			cacheItems(foodToCache, theCache, "foodCache");
+			cacheItems(eventsToCache, theCache, "eventCache");
 
-			console.log("done?");
-			callback(null, theCache);
+			callback(null, [theCache, foodVenues, eventVenues]);
 		})
 	});
 }
@@ -65,7 +67,7 @@ function getVenues(req, callback) {
 function cacheItems(items, cache, space) {
 	for(var i = 0; i < items.length; i++) {
 		foursquare.venues.venue(items[i], {}, function(err, venueInfo) {
-			cache[space].push(getVenueData(venueInfo.response.venue));
+			cache.space.push(getVenueData(venueInfo.response.venue));
 			cache.save(); // ??
 		});
 	}
@@ -197,13 +199,19 @@ exports.getEvents = function(req, res) {
 		}
 	],
 	function(err, results) {
+		var cache = results[0];
+		var foodIDs = results[1];
+		var eventIDs = results[2];
+		// console.log(cache);
+		// console.log(cache[0].length);
+		// console.log(cache[1].length);
+		// console.log(cache[2].length);
+		//This doesn't work guys
 		res.render('events/events', {
 			title: 'Events',
-			food: results[0],
-			events: results[1],
+			food: cache[1][0],
+			events: cache[1][0]
 		});
-		console.log("Let's see how this goes.");
-
 	});
 }
 
