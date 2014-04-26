@@ -277,7 +277,7 @@ function getIDs(venueList) {
 }
 
 function inPriceRange(venue, user) {
-	if !(price) {
+	if (!venue.price) {
 		return true;
 	}
 
