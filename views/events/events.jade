@@ -4,37 +4,58 @@ block content
 	.container-fluid#event-list
 		.row
 			.col-xs-8
-				h3 Name | Rating
-				h3 Location
+				span.event-text Name | 
+				- var ratingNum = 0
+				- for (var i=0; i < Math.floor(3.4); i++)
+					span.event-text.fa.fa-star						
+				- var remaining = 5 - 3.4
+					- if (remaining%1 != 0)
+						span.event-text.fa.fa-star-half-o
+							- var remaining = remaining - 1
+					- if (remaining > 0)
+						- for (var i=0; i < remaining; i++)
+							span.event-text.fa.fa-star-o
+				br
+				span.event-text Location
 			.col-xs-4
 				.pull-right.button.btn.btn-default.btn-icon(type='button')
 					i.fa.fa-times
 		.row
 			.col-xs-8
-				h3 Name | Rating
-				h3 Location
+				span.event-text Name | 
+				- var ratingNum = 0
+				- for (var i=0; i < Math.floor(3.4); i++)
+					span.event-text.fa.fa-star						
+				- var remaining = 5 - 3.4
+					- if (remaining%1 != 0)
+						span.event-text.fa.fa-star-half-o
+							- var remaining = remaining - 1
+					- if (remaining > 0)
+						- for (var i=0; i < remaining; i++)
+							span.event-text.fa.fa-star-o
+				br
+				span.event-text Location
 			.col-xs-4
 				.pull-right.button.btn.btn-default.btn-icon(type='button')
 					i.fa.fa-times
 		.row
-			h3 Map Start to Location 1
+			h3 Begin your adventure...
+			h3 Start at LOCATION and go to LOCATION_1
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=12128%20SE%2013th%20St%2C%20Bellevue%2C%20WA%2C%20United%20States&destination=1927%20Orrington%20Avenue%2C%20Evanston%2C%20IL%2C%20United%20States&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
 			h3 Name | Rating
 			h4 Location
 			h4 More info
 		.row
-			h3 Map Location 1 to Location 2
+			h3 Once you've visited LOCATION_1 head over to LOCATION_2
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=12128%20SE%2013th%20St%2C%20Bellevue%2C%20WA%2C%20United%20States&destination=1927%20Orrington%20Avenue%2C%20Evanston%2C%20IL%2C%20United%20States&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
 			h3 Name | Rating
 			h4 Location
 			h4 More info
 		.row
-			h3 Map Location 2 to Home
+			h3 After your fun journey, head home to LOCATION_3
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=12128%20SE%2013th%20St%2C%20Bellevue%2C%20WA%2C%20United%20States&destination=1927%20Orrington%20Avenue%2C%20Evanston%2C%20IL%2C%20United%20States&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
-		.row
-			//- iframe(width='100%', height='400', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=12128%20SE%2013th%20St%2C%20Bellevue%2C%20WA%2C%20United%20States&destination=1927%20Orrington%20Avenue%2C%20Evanston%2C%20IL%2C%20United%20States&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
 			.button.btn.btn-default.btn-lg.btn-clear(type='button') Save
 			.pull-right.button.btn.btn-default.btn-lg.btn-clear(type='button') Share
