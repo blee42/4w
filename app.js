@@ -153,7 +153,7 @@ app.get('/api/instagram', passportConf.isAuthenticated, passportConf.isAuthorize
 app.post('/api/instagram', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.postInstagram);
 
 // events routs
-app.post('/events', eventsController.getEvents);
+app.post('/explore', eventsController.getEvents);
 
 /**
  * OAuth routes for sign-in.
