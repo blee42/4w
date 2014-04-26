@@ -271,8 +271,9 @@ body {
   font-size: x-large;
 }
 
-// Events
-// -------------------------
+.detail-text {
+  font-size: large;
+}
 
 .form-group {
   color:white;
@@ -294,14 +295,29 @@ a, a:hover {
 }
 
 .detail-row {
-  // margin:10px 0 10px 0;
-  height: 125px;
+  margin:30px 0 30px 0;
+  height: 120px;
 }
 
-.badge {
+.badge-div {
   position: absolute;
   right:0;
   bottom:0;
+}
+
+.badge-indiv {
+  text-align: center;
+  width:60px;
+  height:60px;
+  margin: 0 10px 0 10px;
+}
+
+.icon-div {
+  text-align: center;
+  width:60px;
+  height:60px;
+  float: right;
+  margin: 0 10px 0 10px;
 }
 
 .icon-label {
@@ -310,13 +326,13 @@ a, a:hover {
   margin:0;
 }
 
-// .col-xs-4 {
-//   background-color: red;
-// }
+@media (max-width: 300px) {
+  .detail-row {
+    margin:30px 0 30px 0;
+    height: 500px;
+  }
+}
 
-// .col-xs-8 {
-//   background-color: blue;
-// }
 
 
 

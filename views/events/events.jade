@@ -8,7 +8,7 @@ block content
 			h3 Start at YOUR_LOCATION and go to #{eventLocation[0].name}
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=12128%20SE%2013th%20St%2C%20Bellevue%2C%20WA%2C%20United%20States&destination=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
-			.col-xs-8.detail-row
+			.col-xs-6.detail-row
 				span.event-text #{eventLocation[0].name}
 				br  
 				- var ratingNum = 0
@@ -23,21 +23,26 @@ block content
 						- for (var i=0; i < remaining; i++)
 							span.event-text.fa.fa-star-o
 				br
-				span.event-text #{eventLocation[0].location.address}
+				span.detail-text #{eventLocation[0].location.address}
 				br
 				span
-					a(class='event-text' href='#{eventLocation[0].url}' target='_blank') More Details...
-			.col-xs-4.detail-row
+					a(class='detail-text' href='#{eventLocation[0].url}' target='_blank') More Details...
+			.col-xs-6.detail-row
 				.pull-right.button.btn.btn-default.btn-icon(type='button')
-					i.fa.fa-times
-				a.pull-right.button.btn.btn-default.btn-icon.badge(href='http://www.northwestern.edu/uservices/transportation/shuttles/chicago/index.html', target='_blank', type='button')
-					img(src='../img/bus.png', alt='shuttle', width='40')
-					p.icon-label NU Shuttle
+					img(src='../img/refresh.png', alt='refresh', width='20')
+				.badge-div
+					a.pull-right.button.btn.btn-default.btn-icon.badge-indiv(href='http://www.northwestern.edu/uservices/transportation/shuttles/chicago/index.html', target='_blank', type='button')
+						img(class='badge-img', src='../img/bus.png', alt='shuttle', width='40')
+						p.icon-label NU Shuttle
+					if eventLocation[0].hasWildcardDiscount
+						a.pull-right.button.btn.btn-default.btn-icon.badge-indiv(href='#', target='_blank', type='button')
+							img(class='badge-img', src='../img/paw.png', alt='wildcat discount', width='40')
+							p.icon-label Discount
 		.row
 			h3 Once you've visited #{eventLocation[0].name} head over to #{foodLocation[0].name}
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&destination=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
-			.col-xs-8.detail-row
+			.col-xs-6.detail-row
 				span.event-text #{foodLocation[0].name}
 				br  
 				- var ratingNum = 0
@@ -52,16 +57,21 @@ block content
 						- for (var i=0; i < remaining; i++)
 							span.event-text.fa.fa-star-o
 				br
-				span.event-text #{foodLocation[0].location.address}
+				span.detail-text #{foodLocation[0].location.address}
 				br
 				span
-					a(class='event-text' href='#{foodLocation[0].url}' target='_blank') More Details...
-			.col-xs-4.detail-row
+					a(class='detail-text' href='#{foodLocation[0].url}' target='_blank') More Details...
+			.col-xs-6.detail-row
 				.pull-right.button.btn.btn-default.btn-icon(type='button')
-					i.fa.fa-times
-				a.pull-right.button.btn.btn-default.btn-icon.badge(href='http://www.northwestern.edu/uservices/transportation/shuttles/chicago/index.html', target='_blank', type='button')
-					img(src='../img/bus.png', alt='shuttle', width='40')
-					p.icon-label NU Shuttle
+					img(src='../img/refresh.png', alt='refresh', width='20')
+				.badge-div
+					a.pull-right.button.btn.btn-default.btn-icon.badge-indiv(href='http://www.northwestern.edu/uservices/transportation/shuttles/chicago/index.html', target='_blank', type='button')
+						img(class='badge-img', src='../img/bus.png', alt='shuttle', width='40')
+						p.icon-label NU Shuttle
+					if foodLocation[0].hasWildcardDiscount
+						a.pull-right.button.btn.btn-default.btn-icon.badge-indiv(href='#', target='_blank', type='button')
+							img(class='badge-img', src='../img/paw.png', alt='wildcat discount', width='40')
+							p.icon-label Discount
 		.row
 			h3 After your fun journey, head home to LOCATION_3
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&destination=1927%20Orrington%20Avenue%2C%20Evanston%2C%20IL%2C%20United%20States&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
