@@ -13,6 +13,9 @@ var async = require("async");
 var _ = require("underscore");
 var foursquare = require('node-foursquare-venues')(secrets.foursquare.clientId, secrets.foursquare.clientSecret);
 var wildcardDiscounts = require("../wildcardChicagoList.js");
+var DEFAULT_FOOD = ["4d4b7105d754a06374d81259", ""];
+var DEFAULT_EVENTS = ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"];
+var TIME_FILTER = "2pm";
 
 // Hardcoded Constants: may or may not be temporary
 var location = "The Loop, Chicago IL"
@@ -80,7 +83,7 @@ function cacheItems(items, cache, space) {
 }
 
 function getFoodVenues(req, callback) {
-	var food = ["4d4b7105d754a06374d81259", ""]; // general food
+	var food = DEFAULT_FOOD; // general food
 	if (req.user) { // check that preferences have bene filled
 		food = req.user.foodPreference.query;
 	} 
@@ -97,7 +100,7 @@ function getFoodVenues(req, callback) {
 
 function getEventVenues(req, callback) {
 	// arts & entertainment, events, shopping
-	var events = ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"] ; 
+	var events = DEFAULT_EVENTS; 
 	if (req.user) { 
 		events = req.user.eventPreference.query;
 	}
@@ -177,7 +180,6 @@ function getVenueData(venue) {
 };
 
 function sortVenues(cache, idList) {
-	// var venueList = filterVenues(venueList, user);
 
 	var venueList = [];
 	for(var i=0; i < cache.length; i++) {
@@ -186,6 +188,8 @@ function sortVenues(cache, idList) {
 			venueList.push(cache[i]);
 		}
 	}
+
+   var venueList = filterVenues(venueList, user);
 
 	venueList.sort(function(x, y) {
 		return scoreVenue(y) - scoreVenue(x);
@@ -197,26 +201,32 @@ function sortVenues(cache, idList) {
 // add additional filters if necessary
 	// mall filter (!!!)
 // visitedVenues should be an array of IDs
-function filterVenues(idList, user) {
+function filterVenues(venueList, user) {
 	var visitedVenues = [];
 	if (user) {
 		visitedVenues = user.visitedVenues;
 	}
 
-	return _.filter(idList, function(venue) {
-		return visitedVenues.indexOf(venue.id) == -1;
+	return _.filter(venueList, function(venue) {
+		return (visitedVenues.indexOf(venue.id) == -1) && isTimeWithinRange(TIME_FILTER, getTodaysHours(venue));
 	});
+};
+
+function getTodaysHours(venue) {
+	var timeframes = venue.hours.timeframes;
+	for(var i=0; i < timeframes.length; i++) {
+		if (timeframes[i].includesToday == true) {
+			return timeframes[i].open[0].renderedTime;
+		}
+	}
+	return timeframes[0].open[0].renderedTime;
+
 };
 
 // we can update this scoring algorithm as needed!
 function scoreVenue(venue) {
 	var wildcardFactor = venue.hasWildcardDiscount * 3;
 	return venue.rating + wildcardFactor;
-};
-
-function getSortedEventVenues(eventCache, eventList) {
-	return;
-
 };
 
 exports.getEvents = function(req, res) {
@@ -248,13 +258,22 @@ function computeQueries(req) {
 		User.findById(req.user.id, function(err, user) {
 			switch (req.body.timeOfDay) {
 				case "morning":
+					user.foodPreference.query[0] = "4bf58dd8d48988d143941735"; // breakfast spot
+					DEFAULT_FOOD = "4bf58dd8d48988d143941735";
+					TIME_FILTER = "10am";
 					break;
-				case "afternoon":
-					break;
-				default: // night
+				case "night":
+					user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
+					DEFAULT_FOOD = "4d4b7105d754a06374d81259";
+					TIME_FILTER = "6pm";
 					if (user.preferences.is21 == "true") {
-						user.eventPreference.query[2] = "4d4b7105d754a06376d81259";
+						user.eventPreference.query[2] = "4d4b7105d754a06376d81259"; // nightlife
 					}
+					break;
+				default: // afternoon, shouldn't happen
+					user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
+					DEFAULT_FOOD = "4d4b7105d754a06374d81259"; 
+					TIME_FILTER = "2pm";
 					break;
 			}
 			user.save();

@@ -25,15 +25,12 @@ var userSchema = new mongoose.Schema({
   preferences: {
     price: {type: String, default:'20-30'}, // "10-20", "20-30", "30+"
     is21: {type: String, default:'no'}, // "yes" or "no"
+    xFilter: Array, // things person hit 'x' on that were beyond the probation
   },
   foodPreference: {
-    filterOut: Array, // things person hit 'x' on that were beyond the probation
-    probationFilter: Array, //things person hit 'x' on below 3 times
     query: { type: Array, default: ["4d4b7105d754a06374d81259", ""] }
   },
   eventPreference: {
-    filterOut: Array,
-    probationFilter: Array,
     query: { type: Array, default: ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"] }
   },
 
