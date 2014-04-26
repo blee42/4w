@@ -2,21 +2,22 @@ extends layout
 
 block content
 	.text-center.grad-background
-		h1 
-			font(color='white') Explore Chicago
 		.input-group-center
-			.row
+			.row#home-row
 				h2 Pick a time:
 				br
 				form(method="POST", action='/events',name="timeOfDay", role="form")
 					input(type='hidden', name='_csrf', value=_csrf)
 					.btn-toolbar
-						button.button.btn.btn-time(type='submit', value="morning", name="timeOfDay")
-							.time-icon
-								img(src='/img/morning.png', alt='morning', width='100')
-						button.button.btn.btn-time(type='submit', value="afternoon", name="timeOfDay")
-							.time-icon
-								img(src='/img/afternoon.png', alt='afternoon', width='100')
-						button.button.btn.btn-time(type='submit', value="night", name="timeOfDay")
-							.time-icon
-								img(src='/img/night.png', alt='night', width='100')
+						.col-md-4
+							button.button.btn.btn-time(type='submit', value="morning", name="timeOfDay")
+								.time-icon
+									img(src='/img/morning.png', alt='morning', width='100')
+						.col-md-4
+							button.button.btn.btn-time(type='submit', value="afternoon", name="timeOfDay")
+								.time-icon
+									img(src='/img/afternoon.png', alt='afternoon', width='100')
+						.col-md-4
+							button.button.btn.btn-time(type='submit', value="night", name="timeOfDay")
+								.time-icon
+									img(src='/img/night.png', alt='night', width='100')
