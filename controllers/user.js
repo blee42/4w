@@ -244,8 +244,8 @@ exports.onboardPref = function(req, res) {
 exports.saveUserPreferences = function(req, res) {
   if (req.user) {
     User.findById(req.user.id, function(err, user) {
-      user.preferences.foodPref = req.body["food-pref"];
-      user.preferences.placePref = req.body["place-pref"];
+      user.preferences.price = req.body["price"];
+      user.preferences.is21 = req.body["is21"];
       user.preferences.transPref = req.body["trans-pref"];
       computeQueries(user);
       //computeRating(user);

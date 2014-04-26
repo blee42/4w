@@ -44,7 +44,7 @@ function getVenues(req, callback) {
 			}
 			else {
 				theCache = new Cache();
-				console.log("NEW CACH MADE")
+				console.log("NEW CACHE MADE")
 			}
 
 			for(var i=0; i < theCache.foodCache.length; i++) {
@@ -66,30 +66,40 @@ function getVenues(req, callback) {
 			console.log("Checking events to add...");
 			console.log(eventsToCache.length);
 
-			cacheItems(foodToCache, theCache, "foodCache");
-			cacheItems(eventsToCache, theCache, "eventCache");
+			async.parallel([
+				function(thecback) {
+					cacheItems(foodToCache, theCache, "foodCache", thecback);
+				},
+				function(thecback) {
+					cacheItems(eventsToCache, theCache, "eventCache", thecback);
+				}
+			],
 
-			callback(null, [theCache, foodVenues, eventVenues]);
-		})
+			function(err, res) {
+				callback(null, [theCache, foodVenues, eventVenues]);
+			});
+		});
 	});
 }
 
-function cacheItems(items, cache, space) {
+function cacheItems(items, cache, space, cback) {
 	async.each(items, function(item, callback) {
 		foursquare.venues.venue(item, {}, function(err, venueInfo) {
 			cache[space].push(getVenueData(venueInfo.response.venue));
 			cache.save();
+			callback();
 		})},
 		function(err) {
 			if (err) {
 				console.log("An error as occured!");
+				cback(null, 1);
 			}
 			else {
 				console.log("Done! Yes! Finally!");
+				cback(null, 1);
 			}
-	})
+	});
 }
-
 
 function getFoodVenues(req, callback) {
 	var food = DEFAULT_FOOD; // general food
@@ -282,11 +292,12 @@ exports.getEvents = function(req, res) {
 		var foodList = sortVenues(cache.foodCache, foodIDs, req.user);
 		var eventList = sortVenues(cache.eventCache, eventIDs, req.user);
 
+		console.log("NUMBER IN HERE ACTUALLY");
 		console.log(foodList.length);
 		console.log(eventList.length);
 
 		res.render('events/events', {
-			title: 'Events',
+			title: 'Explore',
 			foodLocation: foodList, // this should be the first food in cache
 			eventLocation: eventList // this should be the first event in cache
 		});
