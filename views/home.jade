@@ -2,14 +2,19 @@ extends layout
 
 block content
 	.text-center.grad-background
-		h1 Explore Chicago
-		.input-group
-			form
+		h1 
+			font(color='white') Explore Chicago
+		.input-group-center
 			.row
-				h2 Time
-				form(method="POST", action='/events',name="timeOfDay", role="form")
-					input(type='hidden', name='_csrf', value=_csrf)
-					.btn-group
-						button.button.btn.btn-default(type='submit', value="morning", name="timeOfDay") Morning
-						button.button.btn.btn-default(type='submit', value="afternoon", name="timeOfDay") Afternoon
-						button.button.btn.btn-default(type='submit', value="night", name="timeOfDay") Night
+				h2 Pick a time:
+				br
+				.btn-toolbar
+					.button.btn.btn-time(type='button')
+						.time-icon
+							img(src='/img/morning.png', alt='morning', width='100')
+					.button.btn.btn-time(type='button')
+						.time-icon
+							img(src='/img/afternoon.png', alt='afternoon', width='100')
+					.button.btn.btn-time(type='button')
+						.time-icon
+							img(src='/img/night.png', alt='night', width='100')
