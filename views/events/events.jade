@@ -28,8 +28,9 @@ block content
 				span
 					a(class='detail-text' href='#{eventLocation[0].url}' target='_blank') More Details...
 			.col-md-6.detail-row
-				.pull-right.button.btn.btn-default.btn-icon(type='button')
-					img(src='../img/refresh.png', alt='refresh', width='20')
+				form(method='POST')
+					input(type='hidden', name='_csrf', value=_csrf)
+					.pull-right.button.btn.btn-default.btn-refresh(type='submit' formaction='/refresh-event-food-#{eventLocation[0].id}')
 				.badge-div
 					a.pull-right.button.btn.btn-default.btn-icon.badge-indiv(href='http://www.northwestern.edu/uservices/transportation/shuttles/chicago/index.html', target='_blank', type='button')
 						img(class='badge-img', src='../img/bus.png', alt='shuttle', width='40')
@@ -62,8 +63,9 @@ block content
 				span
 					a(class='detail-text' href='#{foodLocation[0].url}' target='_blank') More Details...
 			.col-md-6.detail-row
-				.pull-right.button.btn.btn-default.btn-icon(type='button')
-					img(src='../img/refresh.png', alt='refresh', width='20')
+				form(method='POST')
+					input(type='hidden', name='_csrf', value=_csrf)
+					.pull-right.button.btn.btn-default.btn-refresh(type='submit' formaction='/refresh-food-event-#{foodLocation[0].id}')
 				.badge-div
 					a.pull-right.button.btn.btn-default.btn-icon.badge-indiv(href='http://www.northwestern.edu/uservices/transportation/shuttles/chicago/index.html', target='_blank', type='button')
 						img(class='badge-img', src='../img/bus.png', alt='shuttle', width='40')
