@@ -16,7 +16,7 @@ var wildcardDiscounts = require("../wildcardChicagoList.js");
 
 var DEFAULT_FOOD = ["4d4b7105d754a06374d81259", ""];
 var DEFAULT_EVENTS = ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"];
-var TIME_FILTER = "2pm";
+var TIME_FILTER = "2:00PM";
 
 // Hardcoded Constants: may or may not be temporary
 var location = "The Loop, Chicago IL"
@@ -258,10 +258,7 @@ exports.getEvents = function(req, res) {
 //range is today's hours of operation string "7:00AM-2:00PM"
 function isTimeWithinRange(time, range) {
 	openCloseTimes = range.split('-'); //0 is open, 1 is close
-	a=convertMilitaryTime(openCloseTimes[0])
-	b=convertMilitaryTime(openCloseTimes[1])
-	console.log(a)
-	console.log(b)
+	timeMilitary = convertMilitaryTime(time);
 	if (convertMilitaryTime(openCloseTimes[0]) < time && time < convertMilitaryTime(openCloseTimes[1]))
 		return true
 	else
@@ -283,12 +280,12 @@ function computeQueries(req) {
 			case "morning":
 				req.user.foodPreference.query[0] = "4bf58dd8d48988d143941735"; // breakfast spot
 				DEFAULT_FOOD = "4bf58dd8d48988d143941735";
-				TIME_FILTER = "10am";
+				TIME_FILTER = "10:00AM";
 				break;
 			case "night":
 				req.user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
 				DEFAULT_FOOD = "4d4b7105d754a06374d81259";
-				TIME_FILTER = "6pm";
+				TIME_FILTER = "6:00PM";
 				if (req.user.preferences.is21 == "true") {
 					req.user.eventPreference.query[2] = "4d4b7105d754a06376d81259"; // nightlife
 				}
@@ -296,7 +293,7 @@ function computeQueries(req) {
 			default: // afternoon, shouldn't happen
 				req.user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
 				DEFAULT_FOOD = "4d4b7105d754a06374d81259"; 
-				TIME_FILTER = "2pm";
+				TIME_FILTER = "2:00PM";
 				break;
 		}
 		req.user.save();
