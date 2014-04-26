@@ -87,8 +87,9 @@ function getFoodVenues(req, callback) {
 	var food = DEFAULT_FOOD; // general food
 	if (req.user) { // check that preferences have bene filled
 		food = req.user.foodPreference.query;
-	} 
-	foursquare.venues.search({near: location, limit: "5", categoryId: food[0], query: food[1]}, function(err, foodVenues) {
+	}
+
+	foursquare.venues.search({near: location, limit: "50", categoryId: food[0], query: food[1]}, function(err, foodVenues) {
 		var venues = [];
 
 		for(var i=0; i < foodVenues.response.venues.length; i++) {
@@ -110,7 +111,7 @@ function getEventVenues(req, callback) {
 
 	async.parallel([
 		function(cback) {
-			foursquare.venues.search({near: location, limit: "5", categoryId: events[0]}, function(err, eventVenues) {
+			foursquare.venues.search({near: location, limit: "50", categoryId: events[0]}, function(err, eventVenues) {
 				for(var i=0; i < eventVenues.response.venues.length; i++) {
 					venues1.push(eventVenues.response.venues[i].id);
 				}
@@ -119,7 +120,7 @@ function getEventVenues(req, callback) {
 			});
 		},
 		function(cback) {
-			foursquare.venues.search({near: location, limit: "5", categoryId: events[1]}, function(err, eventVenues) {
+			foursquare.venues.search({near: location, limit: "50", categoryId: events[1]}, function(err, eventVenues) {
 				for(var i=0; i < eventVenues.response.venues.length; i++) {
 					venues2.push(eventVenues.response.venues[i].id);
 				}
@@ -128,7 +129,7 @@ function getEventVenues(req, callback) {
 			});
 		},
 		function(cback) {
-			foursquare.venues.search({near: location, limit: "5", categoryId: events[2]}, function(err, eventVenues) {
+			foursquare.venues.search({near: location, limit: "50", categoryId: events[2]}, function(err, eventVenues) {
 				for(var i=0; i < eventVenues.response.venues.length; i++) {
 					venues3.push(eventVenues.response.venues[i].id);
 				}
@@ -214,7 +215,6 @@ function filterVenues(venueList, user) {
 };
 
 function getTodaysHours(venue) {
-	console.log(venue);
 	try {
 		var timeframes = venue.hours.timeframes;
 		for(var i=0; i < timeframes.length; i++) {
@@ -236,7 +236,6 @@ function isTimeWithinRange(theTime, tRange) {
 	if (tRange == false) {
 		return false;
 	}
-	console.log("NOW TIME:");
 	openCloseTimes = String(tRange).split('\u2013'); //0 is open, 1 is close
 
 	timeMilitary = convertMilitaryTime(theTime);
@@ -248,7 +247,6 @@ function isTimeWithinRange(theTime, tRange) {
 
 //strTime is a stringTime "7:00AM" or "2:00PM" that will be converted to 7 and 14
 function convertMilitaryTime(strTime) {
-	console.log(strTime);
 	if (strTime.indexOf("PM")!=-1) //it is pm
 		return Number(strTime.split(':')[0]) + 12
 	else
@@ -288,28 +286,36 @@ exports.getEvents = function(req, res) {
 };
 
 function computeQueries(req) {
+
+	switch (req.body.timeOfDay) {
+		case "morning":
+			DEFAULT_FOOD = ["4bf58dd8d48988d143941735", ""];
+			TIME_FILTER = "10:00AM";
+			break;
+		case "night":
+			DEFAULT_FOOD = ["4d4b7105d754a06374d81259", ""];
+			break;
+		default: // afternoon, shouldn't happen
+			DEFAULT_FOOD = ["4d4b7105d754a06374d81259", ""]; 
+			TIME_FILTER = "2:00PM";
+			break;
+	}
+
 	if (req.user) {
 		switch (req.body.timeOfDay) {
 			case "morning":
 				req.user.foodPreference.query[0] = "4bf58dd8d48988d143941735"; // breakfast spot
-				DEFAULT_FOOD = "4bf58dd8d48988d143941735";
-				TIME_FILTER = "10:00AM";
 				break;
 			case "night":
 				req.user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
-				DEFAULT_FOOD = "4d4b7105d754a06374d81259";
-				TIME_FILTER = "6:00PM";
 				if (req.user.preferences.is21 == "true") {
 					req.user.eventPreference.query[2] = "4d4b7105d754a06376d81259"; // nightlife
 				}
 				break;
 			default: // afternoon, shouldn't happen
 				req.user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
-				DEFAULT_FOOD = "4d4b7105d754a06374d81259"; 
-				TIME_FILTER = "2:00PM";
 				break;
 		}
-		req.user.save();
 	}
 
 };
