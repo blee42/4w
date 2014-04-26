@@ -8,7 +8,7 @@ block content
 			h3 Start at home and go to #{eventLocation[0].name}
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{latHome},#{longHome}&destination=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&mode=transit&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
-			.col-xs-6.detail-row
+			.col-md-6.detail-row
 				span.event-text #{eventLocation[0].name}
 				br  
 				- var ratingNum = 0
@@ -27,7 +27,7 @@ block content
 				br
 				span
 					a(class='detail-text' href='#{eventLocation[0].url}' target='_blank') More Details...
-			.col-xs-6.detail-row
+			.col-md-6.detail-row
 				.pull-right.button.btn.btn-default.btn-icon(type='button')
 					img(src='../img/refresh.png', alt='refresh', width='20')
 				.badge-div
@@ -42,7 +42,7 @@ block content
 			h3 Once you've visited #{eventLocation[0].name} head over to #{foodLocation[0].name}
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&destination=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&mode=transit&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
-			.col-xs-6.detail-row
+			.col-md-6.detail-row
 				span.event-text #{foodLocation[0].name}
 				br  
 				- var ratingNum = 0
@@ -61,7 +61,7 @@ block content
 				br
 				span
 					a(class='detail-text' href='#{foodLocation[0].url}' target='_blank') More Details...
-			.col-xs-6.detail-row
+			.col-md-6.detail-row
 				.pull-right.button.btn.btn-default.btn-icon(type='button')
 					img(src='../img/refresh.png', alt='refresh', width='20')
 				.badge-div
