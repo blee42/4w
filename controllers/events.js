@@ -17,11 +17,11 @@ var wildcardDiscounts = require("../wildcardChicagoList.js");
 var location = "The Loop, Chicago IL"
 
 function getFoodVenues(req, callback) {
-	var food = "4d4b7105d754a06374d81259"; // general food
+	var food = ["4d4b7105d754a06374d81259", ""]; // general food
 	if (req.user) { // check that preferences have bene filled
-		food = getFoodPreference(req.user);
+		food = req.user.foodPreference.query;
 	} 
-	foursquare.venues.search({near: location, limit: "50", categoryId: food}, function(err, foodVenues) {
+	foursquare.venues.search({near: location, limit: "50", categoryId: food[0], query: food[1]}, function(err, foodVenues) {
 		var venues = [];
 
 		for(var i=0; i < foodVenues.response.venues.length; i++) {
@@ -36,7 +36,7 @@ function getEventVenues(req, callback) {
 	// arts & entertainment, events, shopping
 	var events = ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"] ; 
 	if (req.user) { // check that preferences have bene filled
-		events = getEventPreference(req.user);
+		events = req.user.eventPreference.query;
 	}
 
 	var venues1 = [], venues2 = [], venues3 = [];
@@ -106,11 +106,7 @@ function getVenueData(venue) {
 };
 
 function sortVenues(venueList, user) {
-	console.log("SORTING...")
-	console.log(venueList.length);
 	var venueList = filterVenues(venueList, user);
-	console.log("FILTERING...")
-	console.log(venueList.length);
 	venueList.sort(function(x, y) {
 		return scoreVenue(y) - scoreVenue(x);
 	});
@@ -136,14 +132,6 @@ function filterVenues(venueList, user) {
 function scoreVenue(venue) {
 	var wildcardFactor = (wildcardDiscounts.wildcardDiscountList.indexOf(venue.name) != -1) * 3;
 	return venue.rating + wildcardFactor;
-};
-
-function getFoodPreference(user) {
-
-};
-
-function getEventPreference(user) {
-
 };
 
 exports.getEvents = function(req, res) {
