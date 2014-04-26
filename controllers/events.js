@@ -32,8 +32,8 @@ function getVenues(req, callback) {
 		}
 	],
 	function(err, results) {
-		var foodVenues = filterVenues(results[0], req.user); // nothing is taken out yet
-		var eventVenues = filterVenues(results[1], req.user);
+		var foodVenues = results[0];
+		var eventVenues = results[1];
 
 		Cache.findOne({}, function(err, theCache) {
 			var foodToCache = foodVenues.slice();
@@ -180,7 +180,7 @@ function getVenueData(venue) {
 	return info;
 };
 
-function sortVenues(cache, idList) {
+function sortVenues(cache, idList, user) {
 
 	var venueList = [];
 	for(var i=0; i < cache.length; i++) {
@@ -214,14 +214,45 @@ function filterVenues(venueList, user) {
 };
 
 function getTodaysHours(venue) {
-	var timeframes = venue.hours.timeframes;
-	for(var i=0; i < timeframes.length; i++) {
-		if (timeframes[i].includesToday == true) {
-			return timeframes[i].open[0].renderedTime;
+	console.log(venue);
+	try {
+		var timeframes = venue.hours.timeframes;
+		for(var i=0; i < timeframes.length; i++) {
+			if (timeframes[i].includesToday == true) {
+				return timeframes[i].open[0].renderedTime;
+			}
 		}
+		return timeframes[0].open[0].renderedTime;
 	}
-	return timeframes[0].open[0].renderedTime;
+	catch (err) {
+		return false;
+	}
 
+};
+
+//time is morning (10), afternoon(14), evening (18)
+//range is today's hours of operation string "7:00AM-2:00PM"
+function isTimeWithinRange(theTime, tRange) {
+	if (tRange == false) {
+		return false;
+	}
+	console.log("NOW TIME:");
+	openCloseTimes = String(tRange).split('\u2013'); //0 is open, 1 is close
+
+	timeMilitary = convertMilitaryTime(theTime);
+	if (convertMilitaryTime(openCloseTimes[0]) < timeMilitary && timeMilitary < convertMilitaryTime(openCloseTimes[1]))
+		return true
+	else
+		return false
+};
+
+//strTime is a stringTime "7:00AM" or "2:00PM" that will be converted to 7 and 14
+function convertMilitaryTime(strTime) {
+	console.log(strTime);
+	if (strTime.indexOf("PM")!=-1) //it is pm
+		return Number(strTime.split(':')[0]) + 12
+	else
+		return Number(strTime.split(':')[0]) 
 };
 
 // we can update this scoring algorithm as needed!
@@ -242,9 +273,11 @@ exports.getEvents = function(req, res) {
 		var foodIDs = results[0][1];
 		var eventIDs = results[0][2];
 
-		var foodList = sortVenues(cache.foodCache, foodIDs);
-		console.log(foodList[0]);
-		var eventList = sortVenues(cache.eventCache, eventIDs);
+		var foodList = sortVenues(cache.foodCache, foodIDs, req.user);
+		var eventList = sortVenues(cache.eventCache, eventIDs, req.user);
+
+		console.log(foodList.length);
+		console.log(eventList.length);
 
 		res.render('events/events', {
 			title: 'Events',
@@ -252,26 +285,6 @@ exports.getEvents = function(req, res) {
 			eventLocation: eventList // this should be the first event in cache
 		});
 	});
-};
-
-//time is morning (10), afternoon(14), evening (18)
-//range is today's hours of operation string "7:00AM-2:00PM"
-function isTimeWithinRange(time, range) {
-	openCloseTimes = range.split('-'); //0 is open, 1 is close
-	timeMilitary = convertMilitaryTime(time);
-	if (convertMilitaryTime(openCloseTimes[0]) < time && time < convertMilitaryTime(openCloseTimes[1]))
-		return true
-	else
-		return false
-};
-
-//strTime is a stringTime "7:00AM" or "2:00PM" that will be converted to 7 and 14
-function convertMilitaryTime(strTime) {
-	console.log(strTime);
-	if (strTime.indexOf("PM")!=-1) //it is pm
-		return ret = Number(strTime.split(':')[0]) + 12
-	else
-		return ret = Number(strTime.split(':')[0]) 
 };
 
 function computeQueries(req) {
