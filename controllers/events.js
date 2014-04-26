@@ -9,6 +9,7 @@
 
 var secrets = require("../config/secrets");
 var async = require("async");
+var _ = require("underscore");
 var foursquare = require('node-foursquare-venues')(secrets.foursquare.clientId, secrets.foursquare.clientSecret);
 var wildcardDiscounts = require("../wildcardChicagoList.js");
 console.log(wildcardDiscounts.wildcardDiscountList);
@@ -28,7 +29,7 @@ function getFoodVenues(req, callback) {
 			venues.push(getVenueData(foodVenues.response.venues[i]));
 		}
 
-		callback(null, sortVenues(venues));
+		callback(null, sortVenues(venues, req.user));
 	});
 };
 
@@ -44,7 +45,7 @@ function getEventVenues(req, callback) {
 			venues.push(getVenueData(eventVenues.response.venues[i]));
 		}
 
-		callback(null, sortVenues(venues));
+		callback(null, sortVenues(venues, req.user));
 	});
 };
 
@@ -77,9 +78,34 @@ function getVenueData(venue) {
 	return info;
 };
 
-function sortVenues(venueList) {
-	return venueList;
+function sortVenues(venueList, user) {
+	var venueList = filterVenues(venueList, user);
+	venueList.sort(function(x, y) {
+		return scoreVenue(y) - scoreVenue(x);
+	});
 
+	return venueList;
+};
+
+// add additional filters if necessary
+	// mall filter (!!!)
+// visitedVenues should be an array of IDs
+function filterVenues(venueList, user) {
+	var visitedVenues = [];
+	if (user) {
+		visitedVenues = user.visitedVenues;
+	}
+
+	return _.filter(venueList, function(venue) {
+		visitedVenues.indexOf(venue.id) == -1;
+	});
+
+};
+
+// we can update this scoring algorithm as needed!
+function scoreVenue(venue) {
+	var wildcardFactor = (wildcardDiscounts.wildcardDiscountList.indexOf(venue.name) != -1) * 7;
+	return venue.rating + wildcardFactor;
 };
 
 function getFoodPreference(user) {
