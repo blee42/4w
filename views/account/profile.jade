@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-  .page-header
+  .page-header.text-center.white-text
     h3 Profile Information
   .profile  
     form.form-horizontal(action='/account/profile', method='POST')
@@ -42,7 +42,7 @@ block content
               i.fa.fa-magnet
               | Update Profile
 
-  .page-header
+  .page-header.text-center.white-text
     h3 Change Password
   .profile  
     form.form-horizontal(action='/account/password', method='POST')
@@ -61,6 +61,12 @@ block content
             button.btn.btn.btn-primary(type='submit')
               i.fa.fa-keyboard-o
               | Change Password
+  .page-header.text-center.white-text
+    h3 Saved Trips
+  .profile  
+    .ul.list-group
+      each trip in events
+        | #{trip}
 
   //- .page-header
   //-   h3 Delete Account
