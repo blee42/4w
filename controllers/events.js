@@ -135,7 +135,8 @@ function scoreVenue(venue) {
 };
 
 exports.getEvents = function(req, res) {
-
+	console.log("Body below:");
+	console.log(req.body);
 	async.parallel([
 		function(callback) {
 			getFoodVenues(req, callback);
@@ -145,15 +146,15 @@ exports.getEvents = function(req, res) {
 		}
 	],
 	function(err, results) {
-		// res.render('INSERT_PAGE_HERE', {
-		// 	title: 'Events',
-		// 	food: results[0],
-		// 	events: results[1],
-		// });
-		console.log(results[0][0]);
-		console.log(results[1][0]);
-		console.log(results[0].length);
-		console.log(results[1].length);
+		res.render('events/events', {
+			title: 'Events',
+			food: results[0],
+			events: results[1],
+		});
+		// console.log(results[0][0]);
+		// console.log(results[1][0]);
+		// console.log(results[0].length);
+		// console.log(results[1].length);
 	});
 }
 

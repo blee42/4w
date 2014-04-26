@@ -4,12 +4,12 @@ block content
 	.text-center.grad-background
 		h1 Explore Chicago
 		.input-group
+			form
 			.row
 				h2 Time
-				.btn-group
-					.button.btn.btn-default(type='button') Morning
-					.button.btn.btn-default(type='button') Afternoon
-					.button.btn.btn-default(type='button') Night
-			.row
-				h2 Are you 21?	
-				input(type='checkbox')
+				form(method="POST", action='/events',name="timeOfDay", role="form")
+					input(type='hidden', name='_csrf', value=_csrf)
+					.btn-group
+						button.button.btn.btn-default(type='submit', value="morning", name="timeOfDay") Morning
+						button.button.btn.btn-default(type='submit', value="afternoon", name="timeOfDay") Afternoon
+						button.button.btn.btn-default(type='submit', value="night", name="timeOfDay") Night
