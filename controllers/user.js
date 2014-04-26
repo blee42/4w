@@ -5,7 +5,7 @@ var nodemailer = require('nodemailer');
 var passport = require('passport');
 var User = require('../models/User');
 var secrets = require('../config/secrets');
-
+var Events = require('../models/Events');
 /**
  * GET /login
  * Login page.
@@ -117,8 +117,11 @@ exports.postSignup = function(req, res, next) {
  */
 
 exports.getAccount = function(req, res) {
-  res.render('account/profile', {
-    title: 'Account Management'
+  Events.find({userID:req.user.id}, function(err, events) {
+    res.render('account/profile', {
+      title: 'Account Management',
+      events: events
+    });
   });
 };
 
