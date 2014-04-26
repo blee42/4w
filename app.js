@@ -204,6 +204,8 @@ app.get('/auth/venmo/callback', passport.authorize('venmo', { failureRedirect: '
   res.redirect('/api/venmo');
 });
 
+app.get('/save-link-:id', eventsController.saveSchema);
+
 /**
  * 500 Error Handler.
  * As of Express 4.0 it must be placed at the end of all routes.
