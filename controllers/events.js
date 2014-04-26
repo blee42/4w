@@ -176,8 +176,17 @@ function getVenueData(venue) {
 	return info;
 };
 
-function sortVenues(venueList, user) {
-	var venueList = filterVenues(venueList, user);
+function sortVenues(cache, idList) {
+	// var venueList = filterVenues(venueList, user);
+
+	var venueList = [];
+	for(var i=0; i < cache.length; i++) {
+		var index = idList.indexOf(cache[i].id);
+		if (index > -1) {
+			venueList.push(cache[i]);
+		}
+	}
+
 	venueList.sort(function(x, y) {
 		return scoreVenue(y) - scoreVenue(x);
 	});
@@ -205,10 +214,6 @@ function scoreVenue(venue) {
 	return venue.rating + wildcardFactor;
 };
 
-function getSortedFoodVenues(foodCache, foodList) {
-	return;
-};
-
 function getSortedEventVenues(eventCache, eventList) {
 	return;
 
@@ -225,13 +230,13 @@ exports.getEvents = function(req, res) {
 		var foodIDs = results[0][1];
 		var eventIDs = results[0][2];
 
-		var foodList = getSortedFoodVenues(cache.foodCache, foodIDs)
-		var eventList = getSortedEventVenues(cache.eventCache, eventIDs)
-		//This doesn't work guys
+		var foodList = sortVenues(cache.foodCache, foodIDs);
+		var eventList = sortVenues(cache.eventCache, eventIDs);
+
 		res.render('events/events', {
 			title: 'Events',
-			foodLocation: cache.foodCache, // this should be the first food in cache
-			eventLocation: cache.eventCache // this should be the first event in cache
+			foodLocation: foodList, // this should be the first food in cache
+			eventLocation: eventList // this should be the first event in cache
 		});
 	});
 }
