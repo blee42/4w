@@ -10,7 +10,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "async": "^0.7.0",
+    "async": "~0.7.0",
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.0.2",
     "cheerio": "^0.15.0",
@@ -35,7 +35,7 @@
     "method-override": "^1.0.0",
     "mongoose": "^3.8.8",
     "morgan": "^1.0.0",
-    "node-foursquare": "^0.2.0",
+    "node-foursquare": "~0.2.1",
     "node-linkedin": "^0.1.6",
     "nodemailer": "^0.6.2",
     "passport": "^0.2.0",
@@ -48,13 +48,14 @@
     "passport-oauth": "^1.0.0",
     "passport-twitter": "^1.0.2",
     "request": "^2.34.0",
-    "stripe": "^2.5.0",
     "tumblr.js": "^0.0.4",
     "twilio": "^1.6.0",
     "twit": "^1.1.13",
     "uglify-js": "^2.4.12",
     "underscore": "^1.6.0",
-    "validator": "^3.9.0"
+    "validator": "^3.9.0",
+    "node-foursquare-venues": "~0.3.1",
+    "mongodb": "~1.4.2"
   },
   "devDependencies": {
     "mocha": "^1.18.2",

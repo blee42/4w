@@ -12,7 +12,7 @@ html, body {
 }
 
 body {
-  padding-top: 70px;
+  padding-top: 30px;
 }
 
 #wrap {
@@ -20,19 +20,40 @@ body {
   height: auto !important;
   height: 100%;
   /* Negative indent footer by its height */
-  margin: 0 auto -110px;
+  margin: 0 auto -50px;
   /* Pad bottom by footer height + (optional) extra spacing */
-  padding: 0 0 140px;
+  padding: 0 0 50px;
 }
 
 #footer {
-  height: 110px;
-  padding-top: 15px;
+  color:white;
+  background-color: transparent;
+  height: 10px;
+  border:none;
 }
 
 .container-fluid {
   margin:0px;
   padding:0px;
+}
+
+.chicago-back {
+  background-image: url('../img/chicago-purple.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+
+}
+
+.col-xs-8, .col-xs-4 {
+  padding:0;
+}
+
+.row {
+  color:white;
+  padding:0 30px 0 30px;
+  margin: 15px 0 0 0;
 }
 
 // Navbar
@@ -47,12 +68,21 @@ body {
 }
 
 .navbar-brand {
+  background-color: transparent;
   background-repeat: no-repeat;
   background-size: 40px;
   background-position: left center;
   padding-left: 50px;
   margin-left: 15px;
   height: 45px;
+}
+
+.navbar-default {
+  background-color: transparent;
+}
+
+.navbar-fixed-top {
+  border-width: 0;
 }
 
 // Social Buttons
@@ -108,10 +138,6 @@ body {
 // Home
 // -------------------------
 
-.grad-background {
-  background: linear-gradient(#00aff0 30%, white);
-}
-
 .btn-time {
   border-color:transparent;
   border-width:3px;
@@ -124,3 +150,51 @@ body {
   border-width: 3px;
   border-radius: 25px;
 }
+
+
+// Events
+// -------------------------
+
+.btn-clear{
+  margin: 20px 0 20px 0;
+  background-color: transparent;
+  color:white;
+  box-shadow: none;
+  border-color: white;
+}
+
+.btn-clear:hover {
+  margin: 20px 0 20px 0;
+  background-color: transparent;
+  color:white;
+  box-shadow: none;
+  border-color: white;
+  border-width: 2px;
+}
+
+.btn-default {
+  background-image: none;
+}
+
+.btn-icon, .btn-icon:hover {
+  padding-top:0;
+  background-color: transparent;
+  color:white;
+  box-shadow: none;
+  border:none;
+  font-size: x-large;
+}
+
+.map-div {
+  margin:15px 15px 15px 0;
+}
+
+.fa-times {
+  margin-right: 0;
+  padding:0;
+}
+
+.event-text {
+  font-size: x-large;
+}
+

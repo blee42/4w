@@ -16,6 +16,7 @@ var methodOverride = require('method-override');
 var MongoStore = require('connect-mongo')({ session: session });
 var flash = require('express-flash');
 var path = require('path');
+var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var expressValidator = require('express-validator');
@@ -135,8 +136,6 @@ app.get('/api/lastfm', apiController.getLastfm);
 app.get('/api/nyt', apiController.getNewYorkTimes);
 app.get('/api/aviary', apiController.getAviary);
 app.get('/api/steam', apiController.getSteam);
-app.get('/api/stripe', apiController.getStripe);
-app.post('/api/stripe', apiController.postStripe);
 app.get('/api/scraping', apiController.getScraping);
 app.get('/api/twilio', apiController.getTwilio);
 app.post('/api/twilio', apiController.postTwilio);
@@ -152,7 +151,10 @@ app.post('/api/venmo', passportConf.isAuthenticated, passportConf.isAuthorized, 
 app.get('/api/linkedin', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getLinkedin);
 app.get('/api/instagram', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getInstagram);
 app.post('/api/instagram', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.postInstagram);
-app.get('/events', eventsController.getEvents);
+
+// events routs
+app.post('/events', eventsController.getEvents);
+
 /**
  * OAuth routes for sign-in.
  */
