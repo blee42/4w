@@ -12,7 +12,7 @@ var async = require("async");
 var _ = require("underscore");
 var foursquare = require('node-foursquare-venues')(secrets.foursquare.clientId, secrets.foursquare.clientSecret);
 var wildcardDiscounts = require("../wildcardChicagoList.js");
-console.log(wildcardDiscounts.wildcardDiscountList);
+
 // Hardcoded Constants: may or may not be temporary
 var location = "The Loop, Chicago IL"
 
@@ -21,7 +21,6 @@ function getFoodVenues(req, callback) {
 	if (req.user) { // check that preferences have bene filled
 		food = getFoodPreference(req.user);
 	} 
-
 	foursquare.venues.search({near: location, limit: "50", categoryId: food}, function(err, foodVenues) {
 		var venues = [];
 
@@ -34,19 +33,47 @@ function getFoodVenues(req, callback) {
 };
 
 function getEventVenues(req, callback) {
-	var events = "4d4b7104d754a06370d81259"; // arts & entertainment
+	// arts & entertainment, events, shopping
+	var events = ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"] ; 
 	if (req.user) { // check that preferences have bene filled
 		events = getEventPreference(req.user);
-	} 
-	foursquare.venues.search({near: location, limit: "50", categoryId: events}, function(err, eventVenues) {
-		var venues = [];
+	}
 
-		for(var i=0; i < eventVenues.response.venues.length; i++) {
-			venues.push(getVenueData(eventVenues.response.venues[i]));
+	var venues1 = [], venues2 = [], venues3 = [];
+
+	async.parallel([
+		function(cback) {
+			foursquare.venues.search({near: location, limit: "50", categoryId: events[0]}, function(err, eventVenues) {
+				for(var i=0; i < eventVenues.response.venues.length; i++) {
+					venues1.push(getVenueData(eventVenues.response.venues[i]));
+				}
+
+				cback(null, 1);
+			});
+		},
+		function(cback) {
+			foursquare.venues.search({near: location, limit: "50", categoryId: events[1]}, function(err, eventVenues) {
+				for(var i=0; i < eventVenues.response.venues.length; i++) {
+					venues2.push(getVenueData(eventVenues.response.venues[i]));
+				}
+
+				cback(null, 2);
+			});
+		},
+		function(cback) {
+			foursquare.venues.search({near: location, limit: "50", categoryId: events[2]}, function(err, eventVenues) {
+				for(var i=0; i < eventVenues.response.venues.length; i++) {
+					venues3.push(getVenueData(eventVenues.response.venues[i]));
+				}
+
+				cback(null, 3);
+			});
 		}
-
-		callback(null, sortVenues(venues, req.user));
+	],
+	function(err, results) {
+		callback(null, sortVenues(venues1.concat(venues2).concat(venues3)));
 	});
+
 };
 
 function getVenueData(venue) {
@@ -56,7 +83,7 @@ function getVenueData(venue) {
 	info.location = venue.location; // attrib: address, crossStreet, lat, long, postal, city, state, country, cc
 	info.url = venue.canonicalUrl;
 	info.price = venue.price; // tier (1,2,3,4), message (cheap, moderate, etc.), currency ($, $$, etc.)
-	info.rating = venue.rating;
+	info.rating = Number(venue.rating) / 2;
 
 	// status (closed until x), isOpen, timeframes
 	// timeframes: days (Mon-Fri):, open (array of renderedTimes's), includesToday (boolean, today or not)
@@ -79,7 +106,11 @@ function getVenueData(venue) {
 };
 
 function sortVenues(venueList, user) {
+	console.log("SORTING...")
+	console.log(venueList.length);
 	var venueList = filterVenues(venueList, user);
+	console.log("FILTERING...")
+	console.log(venueList.length);
 	venueList.sort(function(x, y) {
 		return scoreVenue(y) - scoreVenue(x);
 	});
@@ -97,14 +128,13 @@ function filterVenues(venueList, user) {
 	}
 
 	return _.filter(venueList, function(venue) {
-		visitedVenues.indexOf(venue.id) == -1;
+		return visitedVenues.indexOf(venue.id) == -1;
 	});
-
 };
 
 // we can update this scoring algorithm as needed!
 function scoreVenue(venue) {
-	var wildcardFactor = (wildcardDiscounts.wildcardDiscountList.indexOf(venue.name) != -1) * 7;
+	var wildcardFactor = (wildcardDiscounts.wildcardDiscountList.indexOf(venue.name) != -1) * 3;
 	return venue.rating + wildcardFactor;
 };
 
