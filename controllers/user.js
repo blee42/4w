@@ -242,7 +242,18 @@ exports.onboardPref = function(req, res) {
 };
 
 exports.saveUserPreferences = function(req, res) {
-  console.log("work bitch");
+  if (req.user) {
+    User.findById(req.user.id, function(err, user) {
+      user.preferences.foodPref = req.body["food-pref"];
+      user.preferences.placePref = req.body["place-pref"];
+      user.preferences.transPref = req.body["trans-pref"];
+      computeQueries(user);
+      //computeRating(user);
+      user.save();
+    });
+  }
+  console.log(req.body);
+  res.redirect('/');
 };
 
 /**

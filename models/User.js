@@ -21,6 +21,10 @@ var userSchema = new mongoose.Schema({
 
   visitedVenues: Array, //things a person has done
 
+  preferences: {
+    price: {type: String, default:'20-30'}, // "10-20", "20-30", "30+"
+    is21: {type: String, default:'no'}, // "yes" or "no"
+  },
   foodPreference: {
     filterOut: Array, // things person hit 'x' on that were beyond the probation
     probationFilter: Array, //things person hit 'x' on below 3 times
