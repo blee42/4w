@@ -152,7 +152,10 @@ app.post('/api/venmo', passportConf.isAuthenticated, passportConf.isAuthorized, 
 app.get('/api/linkedin', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getLinkedin);
 app.get('/api/instagram', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getInstagram);
 app.post('/api/instagram', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.postInstagram);
+
+// events routs
 app.get('/events', eventsController.getEvents);
+
 /**
  * OAuth routes for sign-in.
  */
