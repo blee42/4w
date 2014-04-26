@@ -16,7 +16,7 @@ var wildcardDiscounts = require("../wildcardChicagoList.js");
 
 var DEFAULT_FOOD = ["4d4b7105d754a06374d81259", ""];
 var DEFAULT_EVENTS = ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"];
-var TIME_FILTER = "2pm";
+var TIME_FILTER = "2:00PM";
 
 // Hardcoded Constants: may or may not be temporary
 var location = "The Loop, Chicago IL"
@@ -214,6 +214,7 @@ function filterVenues(venueList, user) {
 };
 
 function getTodaysHours(venue) {
+	console.log(venue);
 	try {
 		var timeframes = venue.hours.timeframes;
 		for(var i=0; i < timeframes.length; i++) {
@@ -227,6 +228,31 @@ function getTodaysHours(venue) {
 		return false;
 	}
 
+};
+
+//time is morning (10), afternoon(14), evening (18)
+//range is today's hours of operation string "7:00AM-2:00PM"
+function isTimeWithinRange(theTime, tRange) {
+	if (tRange == false) {
+		return false;
+	}
+	console.log("NOW TIME:");
+	openCloseTimes = String(tRange).split('\u2013'); //0 is open, 1 is close
+
+	timeMilitary = convertMilitaryTime(theTime);
+	if (convertMilitaryTime(openCloseTimes[0]) < timeMilitary && timeMilitary < convertMilitaryTime(openCloseTimes[1]))
+		return true
+	else
+		return false
+};
+
+//strTime is a stringTime "7:00AM" or "2:00PM" that will be converted to 7 and 14
+function convertMilitaryTime(strTime) {
+	console.log(strTime);
+	if (strTime.indexOf("PM")!=-1) //it is pm
+		return Number(strTime.split(':')[0]) + 12
+	else
+		return Number(strTime.split(':')[0]) 
 };
 
 // we can update this scoring algorithm as needed!
@@ -261,40 +287,18 @@ exports.getEvents = function(req, res) {
 	});
 };
 
-//time is morning (10), afternoon(14), evening (18)
-//range is today's hours of operation string "7:00AM-2:00PM"
-function isTimeWithinRange(time, range) {
-	if (range == false) {
-		return false;
-	}
-	openCloseTimes = range.split('-'); //0 is open, 1 is close
-	if (convertMilitaryTime(openCloseTimes[0]) < time && time < convertMilitaryTime(openCloseTimes[1]))
-		return true
-	else
-		return false
-};
-
-//strTime is a stringTime "7:00AM" or "2:00PM" that will be converted to 7 and 14
-function convertMilitaryTime(strTime) {
-	console.log(strTime);
-	if (strTime.indexOf("PM")!=-1) //it is pm
-		return ret = Number(strTime.split(':')[0]) + 12
-	else
-		return ret = Number(strTime.split(':')[0]) 
-};
-
 function computeQueries(req) {
 	if (req.user) {
 		switch (req.body.timeOfDay) {
 			case "morning":
 				req.user.foodPreference.query[0] = "4bf58dd8d48988d143941735"; // breakfast spot
 				DEFAULT_FOOD = "4bf58dd8d48988d143941735";
-				TIME_FILTER = "10am";
+				TIME_FILTER = "10:00AM";
 				break;
 			case "night":
 				req.user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
 				DEFAULT_FOOD = "4d4b7105d754a06374d81259";
-				TIME_FILTER = "6pm";
+				TIME_FILTER = "6:00PM";
 				if (req.user.preferences.is21 == "true") {
 					req.user.eventPreference.query[2] = "4d4b7105d754a06376d81259"; // nightlife
 				}
@@ -302,7 +306,7 @@ function computeQueries(req) {
 			default: // afternoon, shouldn't happen
 				req.user.foodPreference.query[0] = "4d4b7105d754a06374d81259"; // general food
 				DEFAULT_FOOD = "4d4b7105d754a06374d81259"; 
-				TIME_FILTER = "2pm";
+				TIME_FILTER = "2:00PM";
 				break;
 		}
 		req.user.save();
