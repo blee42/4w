@@ -9,13 +9,75 @@ block content
 				li.active Step 2
 				li.active Step 3
 				li.active Step 4
+				li.active Step 5
 				li.active End
 			fieldset
 				h2.fs-title Start
 				h3.fs-subtitle Let us help you plan your perfect day. Click next to give us your preferences.
 				input.next.action-button(type='button', name='next', value='Next')
 			fieldset
+				h2.fs-title Step 2
+				h3.fs-subtitle Do you like...?
+				.btn-group(data-toggle='buttons')
+					label.btn.btn-default
+						input#event-pref(type='radio', name='event-pref', value='New')
+						| Trying new things
+					label.btn.btn-default
+						input#event-pref(type='radio', name='event-pref', value='Classic')
+						| The classics
+				input.previous.action-button(type='button', name='previous', value='Previous')
+				input.next.action-button(type='button', name='next', value='Next')
+			fieldset
+				h2.fs-title Step 3
+				h3.fs-subtitle On a perfect Sunday afternoon, you would spend the day at...
+				.btn-group(data-toggle='buttons')
+					label.btn.btn-default
+						input#place-pref(type='radio', name='place-pref', value='Museum')
+						| A museum
+					label.btn.btn-default
+						input#place-pref(type='radio', name='place-pref', value='Comedy')
+						| A comedy show
+					label.btn.btn-default
+						input#place-pref(type='radio', name='place-pref', value='Park')
+						| A park
+					label.btn.btn-default
+						input#place-pref(type='radio', name='place-pref', value='Mall')
+						| A mall
+				br
+				input.previous.action-button(type='button', name='previous', value='Previous')
+				input.next.action-button(type='button', name='next', value='Next')
+			fieldset
+				h2.fs-title Step 4
+				h3.fs-subtitle How much do you spend on a typical meal dining out?
+				.btn-group(data-toggle='buttons')
+					label.btn.btn-default
+						input#price-pref(type='radio', name='price-pref', value='Ten')
+						| $10-$20
+					label.btn.btn-default
+						input#price-pref(type='radio', name='price-pref', value='Twenty')
+						| $20-$30
+					label.btn.btn-default
+						input#price-pref(type='radio', name='price-pref', value='Thirty')
+						| $30+
+				br
+				input.previous.action-button(type='button', name='previous', value='Previous')
+				input.next.action-button(type='button', name='next', value='Next')
+			fieldset
+				h2.fs-title Step 5
+				h3.fs-subtitle Are you 21+?
+				.btn-group(data-toggle='buttons')
+					label.btn.btn-default
+						input#age-pref(type='radio', name='age-pref', value='Yes')
+						| Yes
+					label.btn.btn-default
+						input#age-pref(type='radio', name='age-pref', value='No')
+						| No
+				br
+				input.previous.action-button(type='button', name='previous', value='Previous')
+				input.next.action-button(type='button', name='next', value='Next')		
+			fieldset
 				h2.fs-title End
 				h3.fs-subtitle Thanks for giving us your preferences!  Feel free to change them in your account settings. Click submit and enter the city you are spending your day in!
 				input.previous.action-button(type='button', name='previous', value='Previous')
 				input.submit.action-button(type='submit', name='submit', value='Submit')
+

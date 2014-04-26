@@ -1,8 +1,9 @@
 extends ../layout
 
 block content
-  .page-header
-    h3 Profile Information
+  .profile
+    .page-header
+      h3 Profile Information
   .profile  
     form.form-horizontal(action='/account/profile', method='POST')
       input(type='hidden', name='_csrf', value=_csrf)
@@ -42,8 +43,9 @@ block content
               i.fa.fa-magnet
               | Update Profile
 
-  .page-header
-    h3 Change Password
+  .profile
+    .page-header
+      h3 Change Password
   .profile  
     form.form-horizontal(action='/account/password', method='POST')
       input(type='hidden', name='_csrf', value=_csrf)
