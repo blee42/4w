@@ -18,6 +18,7 @@ var wildcardDiscounts = require("../wildcardChicagoList.js");
 var DEFAULT_FOOD = ["4d4b7105d754a06374d81259", "4bf58dd8d48988d16d941735"];
 var DEFAULT_EVENTS = ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"];
 var TIME_FILTER = "2:00PM";
+var Events = require('../models/Events');
 
 // Hardcoded Constants: may or may not be temporary
 var location = "The Loop, Chicago IL"
@@ -380,21 +381,65 @@ exports.getEvents = function(req, res) {
 		console.log("NUMBER IN HERE ACTUALLY");
 		console.log(foodList.length);
 		console.log(eventList.length);
+		if (req.user) { //copy over to Events
+			var foodVen = {};
+			var foodLoc = {};
+			foodVen.name=foodList[0].name; //copy food
+			foodVen.id=foodList[0].id;
 
-		if (req.user) {
-			User.findById(req.user.id, function(err, user) {
-				user.venueHistory.current.food = user.venueHistory.current.food.concat(filterHistoryDuplicates(foodList, user));
-				user.venueHistory.current.events = user.venueHistory.current.events.concat(filterHistoryDuplicates(eventList, user));
-				user.venueHistory.visited.push(foodList[0].id);
-				user.venueHistory.visited.push(eventList[0].id);
-				user.save();
-		})};
+			foodLoc.lat=foodList[0].location.lat;
+			foodLoc.lng=foodList[0].location.lng;
+			foodLoc.address=foodList[0].location.address;
 
-		res.render('events/events', {
+			foodVen.location = foodLoc;
+			foodVen.rating=foodList[0].rating;
+			foodVen.url=foodList[0].url;
+			foodVen.hasWildcardDiscount=foodList[0].hasWildcardDiscount;
+			foodVen.price=foodList[0].price;
+			foodVen.hours=foodList[0].hours; // copy event
+			console.log(foodVen);
+
+			var eventVen = {};
+			var eventLoc = {};
+			eventVen.name=eventList[0].name; //copy event
+			eventVen.id=eventList[0].id;
+
+			eventLoc.lat=eventList[0].location.lat;
+			eventLoc.lng=eventList[0].location.lng;
+			eventLoc.address=eventList[0].location.address;
+
+			eventVen.location = eventLoc;
+			eventVen.rating=eventList[0].rating;
+			eventVen.url=eventList[0].url;
+			eventVen.hasWildcardDiscount=eventList[0].hasWildcardDiscount;
+			eventVen.price=eventList[0].price;
+			eventVen.hours=eventList[0].hours; 
+
+			var newEvents = new Events({
+				userID:req.user.id,
+				saved:'no',
+				timeOfDay:req.body.timeOfDay,
+				for21:req.user.preferences.is21,
+				foodVenue:foodVen,
+				eventVenue:eventVen,
+			});
+			newEvents.save();
+			res.render('events/events', {
+				title: 'Explore',
+				// itinerarySchema: newEvents,
+				foodLocation: foodList, // this should be the first food in cache
+				eventLocation: eventList, // this should be the first event in cache
+				EventsID: newEvents.id,
+			});
+		}
+		else {
+			res.render('events/events', {
 			title: 'Explore',
+			// itinerarySchema: newEvents,
 			foodLocation: foodList, // this should be the first food in cache
-			eventLocation: eventList // this should be the first event in cache
-		});
+			eventLocation: eventList, // this should be the first event in cache
+			});
+		}
 	});
 };
 
@@ -458,3 +503,16 @@ function computeQueries(req) {
 	}
 
 };
+
+exports.saveSchema = function(req, res) {
+	Events.findById(req.params.id, function(err, result) {
+		result.saved = 'yes';
+		result.save();
+		res.render('events/events', {
+			title: 'Explore',
+			foodLocation: [result.foodVenue], // this should be the first food in cache
+			eventLocation: [result.eventVenue],
+			EventsID: result.id
+		});
+	});
+}

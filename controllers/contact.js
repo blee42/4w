@@ -48,8 +48,8 @@ exports.postContact = function(req, res) {
   var mailOptions = {
     to: to,
     from: from,
-    subject: subje,
-    text: body
+    subject: subject,
+    text: body,
   };
 
   smtpTransport.sendMail(mailOptions, function(err) {
