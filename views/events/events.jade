@@ -24,7 +24,7 @@ block content
 				br
 				span.event-text #{eventLocation[0].location.address}, #{eventLocation[0].location.city} #{eventLocation[0].location.state}, #{eventLocation[0].location.postalCode}
 				br
-				span.event-text #{eventLocation[0].url}
+				a.event-text #{eventLocation[0].url}
 			.col-xs-4
 				.pull-right.button.btn.btn-default.btn-icon(type='button')
 					i.fa.fa-times
@@ -48,7 +48,7 @@ block content
 				br
 				span.event-text #{foodLocation[0].location.address}, #{foodLocation[0].location.city} #{foodLocation[0].location.state}, #{foodLocation[0].location.postalCode}
 				br
-				span.event-text #{eventLocation[0].url}
+				a.event-text #{eventLocation[0].url}
 			.col-xs-4
 				.pull-right.button.btn.btn-default.btn-icon(type='button')
 					i.fa.fa-times
