@@ -2,13 +2,19 @@ extends ../layout
 
 block content
 	.container-fluid#event-list
+
+		.row
+			h3 Begin your adventure...
+			h3 Start at YOUR_LOCATION and go to #{eventLocation[0].name}
+			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=12128%20SE%2013th%20St%2C%20Bellevue%2C%20WA%2C%20United%20States&destination=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
 		.row
 			.col-xs-8
 				span.event-text #{eventLocation[0].name}
+				br  
 				- var ratingNum = 0
 				- console.log(eventLocation[0].rating);
-				- for (var i=0; i < Math.floor(eventLocation[0].rating); i++)
-					span.event-text.fa.fa-star						
+					- for (var i=0; i < Math.floor(eventLocation[0].rating); i++)
+						span.event-text.fa.fa-star						
 				- var remaining = 5 - eventLocation[0].rating
 					- if (remaining%1 != 0)
 						span.event-text.fa.fa-star-half-o
@@ -17,16 +23,20 @@ block content
 						- for (var i=0; i < remaining; i++)
 							span.event-text.fa.fa-star-o
 				br
-				if typeof eventLocation[0].location === 'undefined'
-					span.event-text #{eventLocation[0].location.address}, #{eventLocation[0].location.city} #{eventLocation[0].location.state}, #{eventLocation[0].location.postalCode}
-				else
-					//- span.event-text #{eventLocation[0].location.city} #{eventLocation[0].location.state}, #{eventLocation[0].location.postalCode}
+				span.event-text #{eventLocation[0].location.address}, #{eventLocation[0].location.city} #{eventLocation[0].location.state}, #{eventLocation[0].location.postalCode}
+				br
+				span
+					a(class='event-text' href='#{eventLocation[0].url}' target='_blank') More Details...
 			.col-xs-4
 				.pull-right.button.btn.btn-default.btn-icon(type='button')
 					i.fa.fa-times
 		.row
+			h3 Once you've visited #{eventLocation[0].name} head over to #{foodLocation[0].name}
+			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&destination=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
+		.row
 			.col-xs-8
-				span.event-text #{foodLocation[0].name} 
+				span.event-text #{foodLocation[0].name}
+				br  
 				- var ratingNum = 0
 				- console.log(foodLocation[0].rating);
 				- for (var i=0; i < Math.floor(foodLocation[0].rating); i++)
@@ -39,28 +49,13 @@ block content
 						- for (var i=0; i < remaining; i++)
 							span.event-text.fa.fa-star-o
 				br
-				if typeof foodLocation[0].location === 'undefined'
-					span.event-text #{foodLocation[0].location.address}, #{foodLocation[0].location.city} #{foodLocation[0].location.state}, #{foodLocation[0].location.postalCode}
-				else
-					//- span.event-text #{foodLocation[0].location.city} #{foodLocation[0].location.state}, #{foodLocation[0].location.postalCode}
+				span.event-text #{foodLocation[0].location.address}, #{foodLocation[0].location.city} #{foodLocation[0].location.state}, #{foodLocation[0].location.postalCode}
+				br
+				span
+					a(class='event-text' href='#{foodLocation[0].url}' target='_blank') More Details...
 			.col-xs-4
 				.pull-right.button.btn.btn-default.btn-icon(type='button')
 					i.fa.fa-times
-		.row
-			h3 Begin your adventure...
-			h3 Start at YOUR_LOCATION and go to #{eventLocation[0].name}
-			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=12128%20SE%2013th%20St%2C%20Bellevue%2C%20WA%2C%20United%20States&destination=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
-		.row
-			h3 #{eventLocation[0].name} | #{eventLocation[0].rating}
-			h4 #{eventLocation[0].location.address}, #{eventLocation[0].location.city} #{eventLocation[0].location.state}, #{eventLocation[0].location.postalCode}
-			h4 #{eventLocation[0].url}
-		.row
-			h3 Once you've visited #{eventLocation[0].name} head over to #{foodLocation[0].name}
-			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&destination=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
-		.row
-			h3 #{foodLocation[0].name} | #{foodLocation[0].rating}
-			h4 #{foodLocation[0].location.address}, #{foodLocation[0].location.city} #{foodLocation[0].location.state}, #{foodLocation[0].location.postalCode}
-			h4 #{eventLocation[0].url}
 		.row
 			h3 After your fun journey, head home to LOCATION_3
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&destination=1927%20Orrington%20Avenue%2C%20Evanston%2C%20IL%2C%20United%20States&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
