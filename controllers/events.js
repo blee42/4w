@@ -8,6 +8,7 @@
 //  - venue returns: https://developer.foursquare.com/docs/responses/venue
 
 var secrets = require("../config/secrets");
+var Cache = require("../models/EventCache.js");
 var async = require("async");
 var _ = require("underscore");
 var foursquare = require('node-foursquare-venues')(secrets.foursquare.clientId, secrets.foursquare.clientSecret);
@@ -28,14 +29,14 @@ function getFoodVenues(req, callback) {
 			venues.push(getVenueData(foodVenues.response.venues[i]));
 		}
 
-		callback(null, sortVenues(venues, req.user));
+		callback(null, venues);
 	});
 };
 
 function getEventVenues(req, callback) {
 	// arts & entertainment, events, shopping
 	var events = ["4d4b7104d754a06370d81259", "4d4b7105d754a06373d81259", "4bf58dd8d48988d1fd941735"] ; 
-	if (req.user) { // check that preferences have bene filled
+	if (req.user) { 
 		events = req.user.eventPreference.query;
 	}
 
@@ -45,6 +46,7 @@ function getEventVenues(req, callback) {
 		function(cback) {
 			foursquare.venues.search({near: location, limit: "50", categoryId: events[0]}, function(err, eventVenues) {
 				for(var i=0; i < eventVenues.response.venues.length; i++) {
+
 					venues1.push(getVenueData(eventVenues.response.venues[i]));
 				}
 
@@ -71,7 +73,7 @@ function getEventVenues(req, callback) {
 		}
 	],
 	function(err, results) {
-		callback(null, sortVenues(venues1.concat(venues2).concat(venues3)));
+		callback(null, venues1.concat(venues2).concat(venues3));
 	});
 
 };
@@ -135,8 +137,6 @@ function scoreVenue(venue) {
 };
 
 exports.getEvents = function(req, res) {
-	console.log("Body below:");
-	console.log(req.body);
 	async.parallel([
 		function(callback) {
 			getFoodVenues(req, callback);
@@ -151,10 +151,10 @@ exports.getEvents = function(req, res) {
 			food: results[0],
 			events: results[1],
 		});
-		// console.log(results[0][0]);
-		// console.log(results[1][0]);
-		// console.log(results[0].length);
-		// console.log(results[1].length);
+		console.log(results[0][0]);
+		console.log(results[1][0]);
+		console.log(results[0].length);
+		console.log(results[1].length);
 	});
 }
 
