@@ -1,8 +1,15 @@
 extends layout
 
 block content
-  h1 Bootstrap starter template
-  p.lead
-    | Use this document as a way to quickly start any new project.
-    br
-    | All you get is this text and a mostly barebones HTML document.
+	.container-fluid.text-center
+		h1 Explore Chicago
+		.input-group
+			.row
+				h2 Time
+				.btn-group
+					.button.btn.btn-default(type='button') Morning
+					.button.btn.btn-default(type='button') Afternoon
+					.button.btn.btn-default(type='button') Night
+			.row
+				h2 Are you 21?	
+				input(type='checkbox')
