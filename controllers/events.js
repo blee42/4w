@@ -13,6 +13,7 @@ var async = require("async");
 var _ = require("underscore");
 var foursquare = require('node-foursquare-venues')(secrets.foursquare.clientId, secrets.foursquare.clientSecret);
 var wildcardDiscounts = require("../wildcardChicagoList.js");
+var User = require("../models/User");
 
 // Hardcoded Constants: may or may not be temporary
 var location = "The Loop, Chicago IL"
