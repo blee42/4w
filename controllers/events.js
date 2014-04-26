@@ -13,15 +13,39 @@ var foursquare = require('node-foursquare-venues')(secrets.foursquare.clientId, 
 
 // Hardcoded Constants: may or may not be temporary
 var location = "The Loop, Chicago IL"
-var food = "4d4b7105d754a06374d81259"; // general food
 
-function getFoodVenues() {
+function getFoodVenues(req, callback) {
+	var food = "4d4b7105d754a06374d81259"; // general food
+	if (req.user) { // check that preferences have bene filled
+		food = getFoodPreference(req.user);
+	} 
 
-}
+	foursquare.venues.search({near: location, limit: "50", categoryId: food}, function(err, foodVenues) {
+		var venues = [];
 
-function getEventVenues() {
+		for(var i=0; i < foodVenues.response.venues.length; i++) {
+			venues.push(getVenueData(foodVenues.response.venues[i]));
+		}
 
-}
+		callback(null, sortVenues(venues));
+	});
+};
+
+function getEventVenues(req, callback) {
+	var events = "4d4b7104d754a06370d81259"; // arts & entertainment
+	if (req.user) { // check that preferences have bene filled
+		events = getEventPreference(req.user);
+	} 
+	foursquare.venues.search({near: location, limit: "50", categoryId: events}, function(err, eventVenues) {
+		var venues = [];
+
+		for(var i=0; i < eventVenues.response.venues.length; i++) {
+			venues.push(getVenueData(eventVenues.response.venues[i]));
+		}
+
+		callback(null, sortVenues(venues));
+	});
+};
 
 function getVenueData(venue) {
 	var info = {};
@@ -44,24 +68,46 @@ function getVenueData(venue) {
 	// https://developer.foursquare.com/docs/responses/photo.html
 	info.photos = venue.photos;
 
+	// menu.url, menu.mobileURL
+	info.menu = venue.menu;
+
 	info.tags = venue.tags;
 
 	return info;
-}
+};
 
 function sortVenues(venueList) {
+	return venueList;
 
-}
+};
+
+function getFoodPreference(user) {
+
+};
+
+function getEventPreference(user) {
+
+};
 
 exports.getEvents = function(req, res) {
 
-	foursquare.venues.search({near: "Chicago IL", query: "Girl & the Goat", limit: "50"}, function(err, returnData) {
-		console.log(returnData);
-		var id = returnData.response.venues[0].id;
-		foursquare.venues.venue(id, function(err, returnData2) {
-			console.log(returnData2);
-			console.log(returnData2.price);
-		});
+	async.parallel([
+		function(callback) {
+			getFoodVenues(req, callback);
+		},
+		function(callback) {
+			getEventVenues(req, callback);
+		}
+	],
+	function(err, results) {
+		// res.render('INSERT_PAGE_HERE', {
+		// 	title: 'Events',
+		// 	food: results[0],
+		// 	events: results[1],
+		// });
+		console.log(results[0][0]);
+		console.log(results[1][0]);
+		console.log(results[0].length);
+		console.log(results[1].length);
 	});
-	
 }
