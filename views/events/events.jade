@@ -2,7 +2,6 @@ extends ../layout
 
 block content
 	.container-fluid#event-list
-
 		.row
 			h3 Begin your adventure...
 			h3 Start at home and go to #{eventLocation[0].name}
@@ -28,8 +27,9 @@ block content
 				span
 					a(class='detail-text' href='#{eventLocation[0].url}' target='_blank') More Details...
 			.col-xs-6.detail-row
-				.pull-right.button.btn.btn-default.btn-icon(type='button')
-					img(src='../img/refresh.png', alt='refresh', width='20')
+				form(method='POST')
+					input(type='hidden', name='_csrf', value=_csrf)
+					button#image-button(type='submit',formaction='/refresh-event-food-#{foodLocation[0].id}')
 				.badge-div
 					a.pull-right.button.btn.btn-default.btn-icon.badge-indiv(href='http://www.northwestern.edu/uservices/transportation/shuttles/chicago/index.html', target='_blank', type='button')
 						img(class='badge-img', src='../img/bus.png', alt='shuttle', width='40')
@@ -38,6 +38,7 @@ block content
 						a.pull-right.button.btn.btn-default.btn-icon.badge-indiv(href='#', target='_blank', type='button')
 							img(class='badge-img', src='../img/paw.png', alt='wildcat discount', width='40')
 							p.icon-label Discount
+
 		.row
 			h3 Once you've visited #{eventLocation[0].name} head over to #{foodLocation[0].name}
 			iframe(class='map-div', width='100%', height='300', frameborder='0', style='border: 0;', src='https://www.google.com/maps/embed/v1/directions?origin=#{eventLocation[0].location.lat},#{eventLocation[0].location.lng}&destination=#{foodLocation[0].location.lat},#{foodLocation[0].location.lng}&mode=transit&key=AIzaSyC7YNko7N6GkPnFmWIrRl1pNUzIsEwZFbk')
@@ -62,8 +63,9 @@ block content
 				span
 					a(class='detail-text' href='#{foodLocation[0].url}' target='_blank') More Details...
 			.col-xs-6.detail-row
-				.pull-right.button.btn.btn-default.btn-icon(type='button')
-					img(src='../img/refresh.png', alt='refresh', width='20')
+				form(method='POST')
+					input(type='hidden', name='_csrf', value=_csrf)
+					button#image-button(type='submit',formaction='/refresh-food-event-#{eventLocation[0].id}')
 				.badge-div
 					a.pull-right.button.btn.btn-default.btn-icon.badge-indiv(href='http://www.northwestern.edu/uservices/transportation/shuttles/chicago/index.html', target='_blank', type='button')
 						img(class='badge-img', src='../img/bus.png', alt='shuttle', width='40')

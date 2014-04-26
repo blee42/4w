@@ -187,6 +187,9 @@ app.get('/auth/linkedin/callback', passport.authenticate('linkedin', { failureRe
 app.get('/account/onboard', passportConf.isAuthenticated, userController.onboardPref);
 app.post('/account/save-pref', passportConf.isAuthenticated, userController.saveUserPreferences);
 
+app.post('/refresh-food-event-:event', eventsController.refreshFood);
+app.post('/refresh-event-food-:food', eventsController.refreshEvent);
+
 /**
  * OAuth routes for API examples that require authorization.
  */

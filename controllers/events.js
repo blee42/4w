@@ -338,3 +338,11 @@ function computeQueries(req) {
 	}
 
 };
+
+exports.refreshFood = function(req, res) {
+	console.log(req.params);
+}
+
+exports.refreshEvent = function(req, res) {
+	console.log(req.params);
+}
