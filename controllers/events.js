@@ -153,7 +153,7 @@ function getVenueData(venue) {
 	// count for #, groups.items -> array of dictionaries of photos
 	// https://developer.foursquare.com/docs/responses/photo.html
 	info.photos = venue.photos;
-
+	info.hasWildcardDiscount = false;
 	// menu.url, menu.mobileURL
 	info.menu = venue.menu;
 
@@ -187,7 +187,8 @@ function filterVenues(venueList, user) {
 
 // we can update this scoring algorithm as needed!
 function scoreVenue(venue) {
-	var wildcardFactor = (wildcardDiscounts.wildcardDiscountList.indexOf(venue.name) != -1) * 3;
+	venue.hasWildcardDiscount = (wildcardDiscounts.wildcardDiscountList.indexOf(venue.name) != -1);
+	var wildcardFactor = venue.hasWildcardDiscount * 3;
 	return venue.rating + wildcardFactor;
 };
 
